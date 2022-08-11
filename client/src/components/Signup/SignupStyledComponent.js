@@ -28,7 +28,7 @@ export const Form = styled.form`
   border: 1px solid #E8E8E8;
   font-family: var(--font);
   margin: 0 24px;
-  width:30%;
+  width:20%;
 `;
 
 export const FirstName = styled.div`
@@ -38,8 +38,8 @@ export const LastName = styled.div`
 
 export const Input = styled.input`
   padding: 10px;
-  width: calc(100% - 40px);
-  margin: 10px 20px 10px 20px;
+  width: calc(100% - 48px);
+  margin: 10px 10px 10px 10px;
   font-family: var(--font);
 `;
 export const Address2 = styled.div`
@@ -52,17 +52,16 @@ export const Button = styled.button`
 font-family: var(--font);
   padding: 10px;
   border: none;
-  margin: 10px 0 0 10px;
-  background: #ffa500;
-  &:hover {
-    color: white;
-  }
-  width:100%;
+  background: #2bd4d4;;
+  color : white;
+  width : calc(100% - 20px);
+  margin : 10px 10px 10px 10px;
 `;
 
 export const Headings = styled.div`
 text-align:center;
 `
 export const StyledLink = styled(Link)`
-margin: 10px 20px 10px 20px;
+margin: 20px 20px 10px 20px;
+color : #3333ff;
 `
