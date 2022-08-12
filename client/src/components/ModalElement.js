@@ -1,6 +1,7 @@
 import React from 'react';
 import { useContext } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ManagefluentContext } from './ManagefluentContext';
 
@@ -9,6 +10,7 @@ export default function ModalElement({open,onClose}) {
   const [projectDescription,setStateProjectDescription] = useState(null);
   const {currentUser,updateProjects,setUpdateProjects} =  useContext(ManagefluentContext);
   const [projectAdded,setProjectAdded] = useState(false);
+  const navigate = useNavigate();
 
   const addNewProject = (e) =>{
     fetch(`/api/project/add-project`,{

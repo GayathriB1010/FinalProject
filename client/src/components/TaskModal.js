@@ -3,7 +3,7 @@ import { useState,useContext } from 'react';
 import { ManagefluentContext } from './ManagefluentContext';
 import styled from 'styled-components';
 
-export default function TaskModal({open,name,onClose}) {
+export default function TaskModal({open,task,onClose}) {
     const [taskDescription,setStateTaskDescription] = useState(null);
     const {currentUser,updateProjects,setUpdateProjects} =  useContext(ManagefluentContext);
     const [projectAdded,setProjectAdded] = useState(false);
@@ -18,12 +18,14 @@ export default function TaskModal({open,name,onClose}) {
        return null
     }
     else{
+      console.log(task);
     return(
       <Wrapper>
       <ModalContent>
       <Form>
         <Head>Edit Task</Head>
         <TaskName>Test task</TaskName>
+        <Members>Members</Members>
         <Label for = "taskDesc">Task Description:</Label>
         <TextArea id="taskDesc" onChange={(e) => setTaskDescription(e)}></TextArea>
         <Buttons>
@@ -31,6 +33,8 @@ export default function TaskModal({open,name,onClose}) {
        <Button>
        Save</Button>
        </Buttons>
+       <Label for="addtoCard">Add to card</Label>
+        <AddToCard>Members</AddToCard>
        </Form>
        </ModalContent>
       </Wrapper>
@@ -108,5 +112,21 @@ export default function TaskModal({open,name,onClose}) {
   const Buttons = styled.div`
   
   `
+  const AddToCard = styled.button`
+  margin:10px 10px 10px 10px;
+  padding:10px;
+  margin-bottom:10px;
+  color:white;
+  background:none;
+  border:1px solid white;
+  border-radius : 10px;
+  font-family: 'Montserrat', sans-serif;
+  background:lightgray;
+  border:none;
+  width : 30%;
+  `
 
-  const TaskName = styled.div``
+  const TaskName = styled.div`
+  margin-bottom:10px;`
+
+  const Members = styled.div``

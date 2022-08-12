@@ -65,7 +65,7 @@ const ProjectTaskBoard = () =>{
             <Done>
                 <Head>Done</Head>
             </Done>
-            <TaskModal open = {isOpen} onClose ={() => setIsOpen(false)}>
+            <TaskModal open = {isOpen} onClose ={() => setIsOpen(false)} >
                 </TaskModal>
         </MainDiv>
     )
