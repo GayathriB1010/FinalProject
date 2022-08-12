@@ -118,7 +118,6 @@ const addTask = async (req,res) =>{
         //connect to the database
         const db = client.db("FinalProject");
         const {name} = req.body;
-        console.log(req.body);
         const projectId = req.params.projectId;
         const result = await db.collection("tasks").insertOne({taskId:uuidv4(),projectId:projectId,status:"todo",description:"",name:name,assignedTo:[]});
         if(result.acknowledged){
@@ -142,7 +141,7 @@ const addProject = async (req,res) =>{
         //connect to the database
         const db = client.db("FinalProject");
         const {projectName,projectDescription,createdBy} = req.body;
-        const result = await db.collection("projects").insertOne({projectId:uuidv4(),projectName:projectName,projectDescription:projectDescription,createdBy:createdBy,userId:["test.user3@gmail.com","test.user4@gmail.com",createdBy]});
+        const result = await db.collection("projects").insertOne({projectId:uuidv4(),projectName:projectName,projectDescription:projectDescription,createdBy:createdBy,userId:["Felipe.Okuneva@hotmail.com","Aileen38@gmail.com","Tremayne.Walter58@yahoo.com","Roderick_Gottlieb6@gmail.com","Orion6@gmail.com",createdBy]});
         if(result.acknowledged){
             res.status(201).json({status:201,message:"project added",data:req.body})
         }
@@ -186,7 +185,7 @@ const getUser = async(req,res) =>{
     try{
         await client.connect();
         const db = client.db("FinalProject");
-        const result = await db.collection("users").findOne({userId:user.email})
+        const result = await db.collection("users").findOne({email:user.email})
         if(result){
             if(user.password === result.password){
             res.status(200).json({status:200,data:result});

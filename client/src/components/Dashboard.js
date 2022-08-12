@@ -11,7 +11,6 @@ const Dashboard = () =>{
     useEffect(() =>{
         const getAllProjects = async() =>{
             const response = await fetch(`/api/all-projects/${currentUser}`);
-            console.log(response);
             const data = await response.json();
             setProjects((data['data']));
         }
@@ -25,7 +24,6 @@ const Dashboard = () =>{
     }
     
     if(projects.length > 0){
-        console.log(projects)
     return(
         <MainDiv>
       {projects.map((project) =>{
@@ -40,7 +38,6 @@ const Dashboard = () =>{
     )
     }
     else{
-        console.log("I am here")
         return (
             <Wrapper>
               <LoadingWheel />
@@ -53,14 +50,17 @@ const Wrapper = styled.div`
 `
 const MainDiv = styled.div`
 display:flex;
+flex-wrap:wrap;
+justify-content:space-evenly;
 `
 const ProjectWrapper = styled.div`
 display:flex;
 flex-direction:column;
-width : 30%;
 border : 1px solid lightgray;
 margin :20px;
 padding : 20px;
+width : 30%;
+box-shadow : 5px 5px 5px 5px lightgray;
 `
 const Description = styled.div`
 color:black;

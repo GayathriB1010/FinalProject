@@ -8,11 +8,9 @@ export default function TaskModal({open,name,onClose}) {
   
     if(!open)
   {
-    console.log(open)
      return null
   }
   else{
-      console.log(name)
     return(
       <Wrapper>
       <TaskName>{name}</TaskName>

@@ -28,10 +28,12 @@ return(
     <Description>
         <DescriptionHead>What can Managefluent do?</DescriptionHead>
         <Descriptionbody>
-            Managefluent is reimaging how project management can be done. By streamlining the process and giving you a place to keep track of all your projects, you no longer need to go anywhere else to keep track of your work.<br/><br/>
-        I. Create a Project<br/>
-        II. Add Tasks.<br/>
-        III. Get projects done.
+            Managefluent is reimaging how project management can be done. By streamlining the process and giving you a place to keep track of all your projects, you no longer need to go anywhere else to keep track of your work.
+        <ul>
+        <Li> Create a Project.</Li>
+        <Li> Add Tasks.</Li>
+        <Li> Get projects done.</Li>
+        </ul>
         </Descriptionbody>
     </Description>
     </Managefluent>
@@ -67,7 +69,7 @@ margin-bottom:10px;
 color:white;
 background:none;
 border:1px solid white;
-border-radius : 25px;
+border-radius : 10px;
 font-family: 'Montserrat', sans-serif;
 `
 const ComputerWomanImage = styled.img`
@@ -97,10 +99,14 @@ font-size : 2rem;
 `
 const Descriptionbody = styled.div`
 margin : 10px;
+font-size:1rem;
 `
 
 const CheckListImg = styled.img`
 margin-left : 100px;
+`
+const Li = styled.li`
+margin:10px;
 `
 
 export default Homepage;

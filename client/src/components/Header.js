@@ -17,7 +17,6 @@ const Header = () =>{
             const response = await fetch(`api/get-adminUsers`);
             const data = await response.json();
             setAdminUsers((data['data']));
-            console.log(adminUsers)
         }
         if(currentUser){
             getAdminUsers();
@@ -25,6 +24,7 @@ const Header = () =>{
     },[currentUser]);
 
     return(
+        <>
        <Wrapper>
            <Head>
                 <LogoAndName onClick={() => navigate("/")}>
@@ -33,16 +33,18 @@ const Header = () =>{
                 </LogoAndName>
                 <NewProject>
                 {adminUsers.map((adminUser) =>(
-                    adminUser.userId === currentUser? 
+                    adminUser.email === currentUser? 
                             <>
                             <Icon>
                         <FiPlusCircle onClick={() => setIsOpen(true)}></FiPlusCircle>
                         </Icon><CreateProject>Create a new project</CreateProject>
-                <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
-                </ModalElement> </>: null))}
+             </>: null))}
                 </NewProject>
            </Head>
        </Wrapper>
+       <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
+                </ModalElement> 
+                </>
     )
 }
 
@@ -67,7 +69,7 @@ font: 900 2rem Montserrat;
 margin-top : 10px;
 `
 const CreateProject = styled.div`
-font-size : 20px;
+font-size : 1.5rem;
 margin : 10px;
 `
 const LogoAndName = styled.div`
@@ -76,10 +78,11 @@ display:flex;
 
 const NewProject = styled.div`
 display:flex;
+color:black;
 `
 
 const Icon = styled.div`
-margin : 10px;
+margin-top :10px;
 `
 
 export default Header;

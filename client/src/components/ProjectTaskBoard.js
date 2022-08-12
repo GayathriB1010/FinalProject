@@ -18,7 +18,6 @@ const ProjectTaskBoard = () =>{
     useEffect(() =>{
         const getAllTodoTasks = async() =>{
             const response = await fetch(`/api/project/${projectId}/todo`);
-            console.log(projectId)
             const data = await response.json();
             setTodoTasks(data.data)
         }
@@ -32,7 +31,6 @@ const ProjectTaskBoard = () =>{
     }
 
     const addnewTask = (e) =>{
-        console.log(name);
         fetch(`/api/project/${projectId}/add-task`,{
             method : "POST",
             body : JSON.stringify({
@@ -51,7 +49,6 @@ const ProjectTaskBoard = () =>{
 
     return(
         <MainDiv>
-        <DndProvider backend={HTML5Backend}>
             <Todo>
             <Head>To do</Head>
                 <NewTask>
@@ -68,7 +65,6 @@ const ProjectTaskBoard = () =>{
             <Done>
                 <Head>Done</Head>
             </Done>
-            </DndProvider>
             <TaskModal open = {isOpen} onClose ={() => setIsOpen(false)}>
                 </TaskModal>
         </MainDiv>
@@ -78,7 +74,8 @@ const ProjectTaskBoard = () =>{
 
 const MainDiv = styled.div`
 display:flex;
-margin:20px;
+margin-left:5%;
+margin-top : 10px;
 gap:20px;
 `
 
@@ -101,6 +98,7 @@ border : 1px solid gray;
 margin : 10px;
 display:flex;
 flex-direction:column;
+font-family: var(--font);
 `;
 
 const Head = styled.h3`
