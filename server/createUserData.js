@@ -14,7 +14,7 @@ const options = {
 
 
 const createUserData = async () => {
-    const client = new MongoClient("mongodb+srv://GayathriB1010:Monoto1995@cluster0.w1ih0.mongodb.net/?retryWrites=true&w=majority", options);
+    const client = new MongoClient(MONGO_URI, options);
 
     try {
         await client.connect();
