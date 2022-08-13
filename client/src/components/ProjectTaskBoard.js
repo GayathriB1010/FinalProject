@@ -10,10 +10,9 @@ import Modal from 'react-bootstrap/Modal';
 import TaskModal from "./TaskModal";
 
 const ProjectTaskBoard = () =>{
-    const {todoTasks,setTodoTasks,inProgressTasks,setInProgressTasks,doneTasks,setDoneTasks,currentUser,name,setName,updateTodo,setUpdateTodo} = useContext(ManagefluentContext);
+    const {todoTasks,setTodoTasks,inProgressTasks,setInProgressTasks,doneTasks,setDoneTasks,currentUser,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked} = useContext(ManagefluentContext);
     const projectId = useParams().id;
     const [isOpen,setIsOpen] = useState(false);
-    const [taskClicked,setTaskClicked] = useState(null);
 
     useEffect(() =>{
         const getAllTodoTasks = async() =>{
@@ -21,7 +20,7 @@ const ProjectTaskBoard = () =>{
             const data = await response.json();
             setTodoTasks(data.data)
         }
-        if(currentUser){
+        if(localStorage.getItem("user")){
             getAllTodoTasks();
         }
     },[updateTodo]);
@@ -46,6 +45,10 @@ const ProjectTaskBoard = () =>{
         })
     }
 
+    const TaskClickFn = () =>{
+        setIsOpen(true);
+        setTaskClicked(!taskClicked)
+    }
 
     return(
         <MainDiv>
@@ -56,7 +59,7 @@ const ProjectTaskBoard = () =>{
                 <AddTask type="button" onClick={(e) => addnewTask(e)}>Add task</AddTask>
                 </NewTask>
                 {todoTasks!==[] ? todoTasks.map((todoTask) =>{
-                    return <TodoTask onClick={() => setIsOpen(true)}>{todoTask.name}</TodoTask>
+                    return <TodoTask onClick={() => TaskClickFn()}>{todoTask.name}</TodoTask>
                 }):<LoadingWheel></LoadingWheel>}
             </Todo>
             <InProgress>

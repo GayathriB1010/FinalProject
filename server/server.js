@@ -13,7 +13,10 @@ const {
   addTask,
   addProject,
   getUserRole,
-  getUser
+  getUsers,
+  getUser,
+  getUserNames,
+  updateTask
 } = require("./projectHandler");
 
 app.get("/api/all-projects/:user",getAllProjects);
@@ -24,6 +27,10 @@ app.post("/api/project/:projectId/add-task",addTask);
 app.post("/api/project/add-project",addProject);
 app.get("/api/get-adminUsers",getUserRole);
 app.get("/api/user/", getUser) //e.g. ?email=tom_smith@gmail.com&password=verystrongpassword
+app.get("/api/get-users/", getUsers)
+app.get("/api/getNames/:email",getUserNames)
+app.patch("/api/update-task",updateTask)
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

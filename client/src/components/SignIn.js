@@ -33,6 +33,7 @@ const SignIn = () => {
     .then(data =>{
       if(data.status === 200){
         setCurrentUser(email);
+        localStorage.setItem("user",email);
         navigate("/dashboard")
       }
       else if(data.status === 400){

@@ -11,17 +11,18 @@ const Dashboard = () =>{
     const {currentUser,setCurrentUser,projects,setProjects,updateProjects,setUpdateProjects,adminUsers,setAdminUsers} = useContext(ManagefluentContext);
     const [isOpen,setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const [isAdmin,setIsAdmin] = useState(false);
 
     useEffect(() =>{
         const getAllProjects = async() =>{
-            const response = await fetch(`/api/all-projects/${currentUser}`);
+            const response = await fetch(`/api/all-projects/${localStorage.getItem("user")}`);
             const data = await response.json();
             setProjects((data['data']));
         }
-        if(currentUser){
+        if(localStorage.getItem("user")){
             getAllProjects();
         }
-    },[currentUser,updateProjects]);
+    },[localStorage.getItem("user"),updateProjects]);
 
     const navigateToProjectTasks = (projectId) =>{
         navigate(`/project/${projectId}`);
@@ -33,31 +34,32 @@ const Dashboard = () =>{
             const response = await fetch(`api/get-adminUsers`);
             const data = await response.json();
             setAdminUsers((data['data']));
+            console.log((data['data']))
         }
-        if(currentUser){
+        if(localStorage.getItem("user")){
             getAdminUsers();
         }
-    },[currentUser]);
+        if(adminUsers.length>0){
+            adminUsers.map((adminUser) =>{
+                if(adminUser.email === localStorage.getItem("user")){
+                  setIsAdmin(true);
+                }
+            })
+        }
+    },[localStorage.getItem("user")]);
     
     if(projects.length > 0){
-        console.log(adminUsers)
     return(
         <PageWrapper>
             <NewProject>
-            <Dashboard>
-                <FiHome></FiHome>
-                Dashboard
-            </Dashboard>
                 {adminUsers.map((adminUser) =>(
-                    adminUser.email === currentUser? 
+                    adminUser.email === localStorage.getItem("user")? 
                             <>
                             <Icon>
                         <FiPlusCircle onClick={() => setIsOpen(true)}></FiPlusCircle>
                         </Icon><CreateProject>Create a new project</CreateProject>
-             </>: null))}
+                        </>: null))}
                 </NewProject>
-                <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
-                </ModalElement> 
         <MainDiv>
       {projects.map((project) =>{
           return(
@@ -70,14 +72,27 @@ const Dashboard = () =>{
           )
        })}
        </MainDiv>
+       <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
+                </ModalElement> 
        </PageWrapper>
+       
     )
-    }
+}
     else{
         return (
-            <Wrapper>
-              <LoadingWheel />
-            </Wrapper>
+            <>
+            <NewProject>
+                {adminUsers.map((adminUser) =>(
+                    adminUser.email === localStorage.getItem("user")? 
+                            <>
+                            <Icon>
+                        <FiPlusCircle onClick={() => setIsOpen(true)}></FiPlusCircle>
+                        </Icon><CreateProject>Create a new project</CreateProject>
+                        </>: null))}
+                </NewProject>
+                <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
+                </ModalElement> 
+                </>
           );
     }
 }

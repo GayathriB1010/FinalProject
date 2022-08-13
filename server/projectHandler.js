@@ -140,8 +140,8 @@ const addProject = async (req,res) =>{
         await client.connect();
         //connect to the database
         const db = client.db("FinalProject");
-        const {projectName,projectDescription,createdBy} = req.body;
-        const result = await db.collection("projects").insertOne({projectId:uuidv4(),projectName:projectName,projectDescription:projectDescription,createdBy:createdBy,userId:["Felipe.Okuneva@hotmail.com","Aileen38@gmail.com","Tremayne.Walter58@yahoo.com","Roderick_Gottlieb6@gmail.com","Orion6@gmail.com",createdBy]});
+        const {projectName,projectDescription,createdBy,usersArray} = req.body;
+        const result = await db.collection("projects").insertOne({projectId:uuidv4(),projectName:projectName,projectDescription:projectDescription,createdBy:createdBy,userId:usersArray});
         if(result.acknowledged){
             res.status(201).json({status:201,message:"project added",data:req.body})
         }
@@ -205,6 +205,79 @@ const getUser = async(req,res) =>{
     }
 }
 
+//get all users 
+const getUsers = async(req,res) =>{
+    const client = new MongoClient(MONGO_URI,options);
+    try{
+        await client.connect();
+        const db = client.db("FinalProject");
+        const result = await db.collection("users").find().toArray();
+        if(result){
+            res.status(200).json({status:200,data:result});
+        }
+        else{
+            res.status(404).json({status:404,message:"users not found"});
+        }
+    }catch(err){
+        res.status(500).json({status:500,message:err.message});
+    }
+    finally{
+    client.close();
+    }
+}
+
+//get user details to get FirstName, lastName
+const getUserNames = async(req,res) =>{
+    const user = req.query.params;
+    const client = new MongoClient(MONGO_URI,options);
+    try{
+        await client.connect();
+        const db = client.db("FinalProject");
+        const result = await db.collection("users").findOne({user})
+        if(result){
+            res.status(200).json({status:200,data:result});
+            }
+    }catch(err){
+        res.status(500).json({status:500,message:err.message});
+    }
+    finally{
+    client.close();
+    }
+}
+
+// updates an existing task
+const updateTask = async (req, res) => {
+    // creates a new client
+    const client = new MongoClient(MONGO_URI, options);
+    // connect to the client
+    try {
+      await client.connect();
+      // connect to the database (db name is provided as an argument to the function)
+      const db = client.db("FinalProject");
+      const { description,assignedTo,taskId } = req.body;
+      //insert a name in collection users
+      const result = await db.collection("tasks").findOne({ taskId });
+      if (result) {
+          const result1 = await db
+          .collection("tasks")
+          .updateOne(
+            { taskId:taskId},
+            { $set: { "description": description,
+          "assignedTo":assignedTo, } },{multi:true}
+          );
+      if (
+        result1.modifiedCount > 0
+      ) {
+        res.status(200).json({ status: 200, message: "data modified" });
+      } else {
+        res.status(404).json({ status: 404, message: "data not modified" });
+      }
+    } 
+  }catch (err) {
+      console.log(err.stack);
+    }
+  };
+  
 module.exports = {
     getAllProjects,
     getAllTodoTasks,
@@ -213,5 +286,8 @@ module.exports = {
     addTask,
     addProject,
     getUserRole,
-    getUser
+    getUser,
+    getUsers,
+    getUserNames,
+    updateTask
 }

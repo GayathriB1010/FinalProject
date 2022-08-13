@@ -52,6 +52,8 @@ const setProjectDescription = (e) =>{
       <Input id="projectName" type = "text" onChange={(e) => setProjectName(e)}></Input>
       <Label for = "projectDesc">Project Description:</Label>
       <TextArea onChange={(e) => setProjectDescription(e)}></TextArea>
+      <Label for = "access">Access:</Label>
+      <Access></Access>
       <Buttons>
      <CloseButton onClick={onClose}>Close</CloseButton>
      <Button onClick = {(e) => addNewProject(e)}
@@ -134,3 +136,4 @@ padding-bottom:10px;
 const Buttons = styled.div`
 
 `
+const Access = styled.div``
