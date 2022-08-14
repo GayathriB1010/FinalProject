@@ -9,7 +9,7 @@ const Header = () =>{
         <>
        <Wrapper>
            <Head>
-                <LogoAndName onClick={() => navigate("/")}>
+                <LogoAndName onClick={() => navigate("/dashboard")}>
                 <Img src={logo}/>
                 <Name>Managefluent</Name>
                 </LogoAndName>
@@ -24,9 +24,6 @@ const Head = styled.div`
 color : black;
 display:flex;
 font-size:30px;
-padding :1rem;
-margin: 0 24px;
-gap : 60%;
 `
 const Wrapper = styled.div`
 background:#2bd4d4;
@@ -34,11 +31,13 @@ background:#2bd4d4;
 const Img = styled.img`
 height : 5rem;
 width :5rem;
+margin:10px 0 0 10px;
 `
 const Name = styled.div`
 color : rgba(0,144,144,1);
-font: 900 2rem Montserrat;
-margin-top : 10px;
+font: 900 2rem Verdana, Geneva, Tahoma, sans-serif;
+margin-top:20px;
+color:white;
 `
 const LogoAndName = styled.div`
 display:flex;

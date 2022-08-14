@@ -133,7 +133,9 @@ const Headings = styled.div`
 `;
 const StyledLink = styled(Link)`
   margin: 20px 20px 10px 20px;
-color : #3333ff;
+  color : #3333ff;
+font:var(--font);
+font-size:1rem;
 `;
 
 const Input = styled.input`

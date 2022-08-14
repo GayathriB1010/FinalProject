@@ -1,24 +1,35 @@
 import React from 'react';
 import { useContext } from 'react';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ManagefluentContext } from './ManagefluentContext';
+import Select from "react-select";
+import LoadingWheel from './LoadingScreen';
 
 export default function ModalElement({open,onClose}) {
   const [projectName,setStateProjectName] = useState(null);
   const [projectDescription,setStateProjectDescription] = useState(null);
-  const {currentUser,updateProjects,setUpdateProjects} =  useContext(ManagefluentContext);
-  const [projectAdded,setProjectAdded] = useState(false);
+  const {currentUser,updateProjects,setUpdateProjects,createProjectClicked,setCreateProjectClicked} =  useContext(ManagefluentContext);
   const navigate = useNavigate();
+  const [users,setUsers] = useState([]);
+  const allUsers = [];
+  const [usersDropdownList,setUsersDropdownList] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState();
 
   const addNewProject = (e) =>{
+    const usersArray = [];
+    selectedOptions.map((option) =>{
+      usersArray.push(option.value);
+    })
+    usersArray.push(localStorage.getItem("user"))
     fetch(`/api/project/add-project`,{
         method : "POST",
         body : JSON.stringify({
           projectName:projectName,
           projectDescription:projectDescription,
-          createdBy:currentUser,
+          createdBy:localStorage.getItem("user"),
+          userId:usersArray
         }),
         headers:{
             "Content-type" :"application/json",
@@ -30,6 +41,21 @@ export default function ModalElement({open,onClose}) {
     })
 }
 
+useEffect(() =>{
+  const getAllUsers = async() =>{
+      const response = await fetch(`/api/get-users/`);
+      const data = await response.json();
+      setUsers(data.data)
+      users.map((user) =>{
+        allUsers.push({value:user.email,label:user.email});
+      })
+      setUsersDropdownList(allUsers);
+  }
+  if(localStorage.getItem("user")){
+    getAllUsers();
+  }
+},[createProjectClicked]);
+
 const setProjectName = (e) =>{
   setStateProjectName(e.target.value);
 }
@@ -37,6 +63,10 @@ const setProjectName = (e) =>{
 const setProjectDescription = (e) =>{
   setStateProjectDescription(e.target.value);
 }
+
+function handleSelect(data) {
+  setSelectedOptions(data)
+  }
 
   if(!open)
   {
@@ -53,7 +83,16 @@ const setProjectDescription = (e) =>{
       <Label for = "projectDesc">Project Description:</Label>
       <TextArea onChange={(e) => setProjectDescription(e)}></TextArea>
       <Label for = "access">Access:</Label>
-      <Access></Access>
+      <Access className="dropdown-container">
+        {usersDropdownList.length>0?<SelectDD
+          options={usersDropdownList}
+          placeholder="Select members"
+          value={selectedOptions}
+          onChange ={handleSelect}
+          isSearchable={true}
+          isMulti
+        />:<LoadingWheel></LoadingWheel>}
+      </Access>
       <Buttons>
      <CloseButton onClick={onClose}>Close</CloseButton>
      <Button onClick = {(e) => addNewProject(e)}
@@ -79,12 +118,14 @@ const Wrapper = styled.div`
 `
 const Label = styled.label`
 margin-top:10px;
+font-size:15px;
 `
 
 const Input = styled.input`
 width:95%;
 padding:10px;
 margin:10px 0 10px 0;
+border:1px solid lightgray;
 `
 
 const Button = styled.button`
@@ -114,7 +155,8 @@ border:none;
 const TextArea = styled.textarea`
 width:95%;
 padding:10px;
-margin:10px 0 10px 0;`
+margin:10px 0 10px 0;
+border:1px solid lightgray;`
 
 const ModalContent = styled.div`
 padding:20px;
@@ -129,7 +171,7 @@ margin-left:30%;
 margin-right:30%;
 `
 const Head = styled.div`
-font-size:2rem;
+font-size:18px;
 border-bottom:1px solid lightgray;
 padding-bottom:10px;
 `
@@ -137,3 +179,9 @@ const Buttons = styled.div`
 
 `
 const Access = styled.div``
+
+const SelectDD = styled(Select)`
+margin:10px 0 10px 0;
+width:100%;
+padding-right:10px;
+`

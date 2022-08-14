@@ -20,7 +20,7 @@ const createUserData = async () => {
         await client.connect();
         const db = client.db("FinalProject");
 
-        for (let i=0;i<10;i++){
+        for (let i=0;i<2;i++){
             const project =({
                 projectId : faker.datatype.number({ min: 1000000 }),
                 projectName:faker.company.catchPhraseAdjective() ,

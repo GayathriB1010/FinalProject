@@ -13,6 +13,8 @@ const ProjectTaskBoard = () =>{
     const {todoTasks,setTodoTasks,inProgressTasks,setInProgressTasks,doneTasks,setDoneTasks,currentUser,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked} = useContext(ManagefluentContext);
     const projectId = useParams().id;
     const [isOpen,setIsOpen] = useState(false);
+    //To set the task selected and pass it on to the task modal
+    const [taskSelected,setTaskSelected] = useState(null);
 
     useEffect(() =>{
         const getAllTodoTasks = async() =>{
@@ -45,21 +47,28 @@ const ProjectTaskBoard = () =>{
         })
     }
 
-    const TaskClickFn = () =>{
+
+    const TaskClickFn = (todoTask) =>{
         setIsOpen(true);
         setTaskClicked(!taskClicked)
+        setTaskSelected(todoTask)
     }
 
     return(
         <MainDiv>
+          <Sidebar>
+        <DashboardIcon>
+                  <Span>Boards</Span>
+                </DashboardIcon>
+                </Sidebar>
             <Todo>
             <Head>To do</Head>
                 <NewTask>
-                <TaskDescription onChange={(e) => newTask(e)}></TaskDescription>
+                <TaskName onChange={(e) => newTask(e)}></TaskName>
                 <AddTask type="button" onClick={(e) => addnewTask(e)}>Add task</AddTask>
                 </NewTask>
                 {todoTasks!==[] ? todoTasks.map((todoTask) =>{
-                    return <TodoTask onClick={() => TaskClickFn()}>{todoTask.name}</TodoTask>
+                    return <TodoTask onClick={() => TaskClickFn(todoTask)}>{todoTask.name}</TodoTask>
                 }):<LoadingWheel></LoadingWheel>}
             </Todo>
             <InProgress>
@@ -68,7 +77,7 @@ const ProjectTaskBoard = () =>{
             <Done>
                 <Head>Done</Head>
             </Done>
-            <TaskModal open = {isOpen} onClose ={() => setIsOpen(false)} >
+            <TaskModal open = {isOpen} onClose ={() => setIsOpen(false)} taskSelected = {taskSelected}>
                 </TaskModal>
         </MainDiv>
     )
@@ -77,50 +86,77 @@ const ProjectTaskBoard = () =>{
 
 const MainDiv = styled.div`
 display:flex;
-margin-left:5%;
-margin-top : 10px;
-gap:20px;
+gap:30px;
 `
 
 const Todo = styled.div`
-border:1px solid gray;
+border:1px solid white;
 height:100vh;
-width:30%`;
+width:25%;
+margin-top : 20px;
+box-shadow : 2px 2px 2px 2px lightgray;
+`
 
 const InProgress = styled.div`
-border:1px solid gray;
-width:30%;`
+border:1px solid white;
+width:25%;
+margin-top : 20px;
+box-shadow : 2px 2px 2px 2px lightgray;`
 
 const Done = styled.div`
-border:1px solid gray;
-width:30%;`
+border:1px solid white;
+box-shadow : 2px 2px 2px 2px lightgray;
+width:25%;
+margin-top : 20px; `
 
 const NewTask = styled.div`
 height : 20vh;
-border : 1px solid gray;
-margin : 10px;
+border : .5px solid lightgray;
+margin : 20px;
 display:flex;
 flex-direction:column;
 font-family: var(--font);
 `;
 
-const Head = styled.h3`
-margin:10px;`
+const Head = styled.h4`
+margin:10px;
+color:#484848;`
 
 const AddTask = styled.button`
 position : relative;
-padding : 10px;
-width : 30%;
-margin : 10px;
+font-family: var(--font);
+  padding: 10px;
+  border: none;
+  background: #2bd4d4;;
+  color : white;
+  width : calc(100% - 20px);
+  margin : 10px 10px 10px 10px;
 `
-const TaskDescription = styled.textarea`
+const TaskName = styled.textarea`
 margin : 10px;
 height : 50%;
+border : .5px solid lightgray;
 `
 const TodoTask = styled.div`
-margin : 10px;
-height : 5vh;
-border : 1px solid lightgray;
-padding : 10px;
+margin : 20px;
+border : 1px solid white;
+box-shadow : 2px 2px 2px 2px lightgray;
+padding : 20px;
+color:black;
+font-size:15px;
 `
+const Sidebar = styled.div`
+width:15%;
+display:flex;
+flex-direction:column;
+border-right:1px solid lightgray;
+background:#F0F8FF;
+`
+
+const DashboardIcon = styled.div`
+font-size : 18px;
+color:#2bd4d4;
+margin : 20px 0 20px 30px;`
+
+const Span = styled.span``
 export default ProjectTaskBoard

@@ -5,29 +5,30 @@ import styled from 'styled-components';
 import Select from "react-select";
 import LoadingWheel from './LoadingScreen';
 
-export default function TaskModal({open,task,onClose}) {
+export default function TaskModal({open,taskSelected,onClose}) {
     const [taskDescription,setStateTaskDescription] = useState(null);
-    const {taskClicked,setTaskClicked} =  useContext(ManagefluentContext);
+    const {taskClicked,setTaskClicked,selectedProjectId,setSelectedProjectId} =  useContext(ManagefluentContext);
     const [projectAdded,setProjectAdded] = useState(false);
     const [isOpen,setIsOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState();
     const [users,setUsers] = useState([]);
     const [usersDropdownList,setUsersDropdownList] = useState([]);
     const [members,setmembers] = useState([])
-    const allUsers = [];
+   const allUsers = [];
 
   useEffect(() =>{
-    const getAllUsers = async() =>{
-        const response = await fetch(`/api/get-users/`);
+    console.log(selectedProjectId)
+    const getProjectUsers = async() =>{
+        const response = await fetch(`/api/getProjectUsers/${selectedProjectId}`);
         const data = await response.json();
-        setUsers(data.data)
+        setUsers(data.data[0].userId)
         users.map((user) =>{
-          allUsers.push({value:user.email,label:user.email});
+          allUsers.push({value:user,label:user});
         })
         setUsersDropdownList(allUsers);
     }
     if(localStorage.getItem("user")){
-      getAllUsers();
+      getProjectUsers();
     }
 },[taskClicked]);
 
@@ -36,17 +37,29 @@ export default function TaskModal({open,task,onClose}) {
   }
   
   function handleSelect(data) {
-    setSelectedOptions(data);
-    console.log(selectedOptions)
-  }
+    setSelectedOptions(data)
+    }
+
+    // const previousSelection = () =>{
+    //   if(taskSelected.assignedTo.length>0){
+    //     taskSelected.assignedTo.map((option) =>{
+    //       previouslySelectedOptions.push({value:option,label:option})
+    //     })
+    //     console.log(previouslySelectedOptions)
+    //   }
+    // }
 
   const updateTask = async() =>{
+    const assingnedMembers = [];
+    selectedOptions.map((option) =>{
+      assingnedMembers.push(option.value);
+    })
     const response = await fetch(`/api/update-Task`,{
     method : "PATCH",
     body : JSON.stringify({
-        taskId : "e5a841aa-1f5e-415b-b52a-62452ee575fc",
+        taskId : '8cf9b4f0-14b1-4953-909c-ae79df591f7b',
         description : taskDescription,
-        assignedTo : selectedOptions
+        assignedTo : assingnedMembers
     }),
     headers:{
         "Content-type" :"application/json",
@@ -63,21 +76,21 @@ export default function TaskModal({open,task,onClose}) {
        return null
     }
     else{
+      console.log(usersDropdownList)
     return(
       <Wrapper>
       <ModalContent>
       <Form>
-        <Head>Edit Task</Head>
-        <TaskName>Test task</TaskName>
+        <Head>{taskSelected.name}</Head>
         <Label for = "taskDesc">Task Description:</Label>
-        <TextArea id="taskDesc" onChange={(e) => setTaskDescription(e)}></TextArea>
+        <TextArea id="taskDesc" onChange={(e) => setTaskDescription(e)}>{taskSelected.description}</TextArea>
         <Label for="access">Members:</Label>
         <div className="dropdown-container">
         {usersDropdownList.length>0?<Select
           options={usersDropdownList}
           placeholder="Select members"
           value={selectedOptions}
-          onChange={handleSelect}
+          onChange ={handleSelect}
           isSearchable={true}
           isMulti
         />:<LoadingWheel></LoadingWheel>}
