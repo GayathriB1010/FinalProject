@@ -20,7 +20,33 @@ const getAllProjects = async (req, res) => {
     const user = req.params.user;
     const result = await db
       .collection("projects")
-      .find({ userId: user })
+      .find({ userId: user }).sort({_id:-1})
+      .toArray();
+    if (result) {
+      res.status(200).json({ status: 200, data: result});
+    } else {
+      res.status(404).json({ status: 404, message: "Projects not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+
+
+
+//returns recent projects of the user
+
+const getRecentProjects = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("FinalProject");
+    const user = req.params.user;
+    const result = await db
+      .collection("projects")
+      .find({ userId: user }).sort({_id:-1}).limit(6)
       .toArray();
     if (result) {
       res.status(200).json({ status: 200, data: result });
@@ -33,6 +59,7 @@ const getAllProjects = async (req, res) => {
     client.close();
   }
 };
+
 
 //add task to todo
 
@@ -68,4 +95,5 @@ const addProject = async (req, res) => {
 module.exports = {
   getAllProjects,
   addProject,
+  getRecentProjects,
 };

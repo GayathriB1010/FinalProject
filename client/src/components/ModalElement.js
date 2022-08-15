@@ -18,6 +18,7 @@ export default function ModalElement({open,onClose}) {
   const [selectedOptions, setSelectedOptions] = useState();
 
   const addNewProject = (e) =>{
+    e.preventDefault();
     const usersArray = [];
     selectedOptions.map((option) =>{
       usersArray.push(option.value);
@@ -38,6 +39,7 @@ export default function ModalElement({open,onClose}) {
     .then((res) => res.json())
     .then((data) =>{
         setUpdateProjects(!updateProjects);
+        onClose();
     })
 }
 
@@ -76,7 +78,7 @@ function handleSelect(data) {
   return(
     <Wrapper>
     <ModalContent>
-    <Form>
+    <Form onSubmit={(e) => addNewProject(e)}>
       <Head>New Project</Head>
       <Label for= "projectName">Project Name:</Label>
       <Input id="projectName" type = "text" onChange={(e) => setProjectName(e)}></Input>
@@ -95,7 +97,7 @@ function handleSelect(data) {
       </Access>
       <Buttons>
      <CloseButton onClick={onClose}>Close</CloseButton>
-     <Button onClick = {(e) => addNewProject(e)}
+     <Button type='submit'
      >Create Project</Button>
      </Buttons>
      </Form>

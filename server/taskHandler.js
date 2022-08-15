@@ -126,14 +126,14 @@ const updateTask = async (req, res) => {
     const db = client.db("FinalProject");
     const { description, assignedTo, taskId } = req.body;
     //insert a name in collection users
-    const result = await db.collection("tasks").findOne({ taskId });
-    console.log(result);
+    const result = await db.collection("tasks").findOne({ taskId:taskId});
     if (result) {
       const result1 = await db
         .collection("tasks")
         .updateOne(
           { taskId: taskId },
-          { $set: { description: description, assignedTo: assignedTo } },
+          { $set: { description: 
+            description, assignedTo: assignedTo } },
           { multi: true }
         );
       if (result1.modifiedCount > 0) {

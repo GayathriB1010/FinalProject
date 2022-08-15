@@ -72,7 +72,6 @@ const getUserNames = async (req, res) => {
 //get users for the specific project
 const getprojectUsers = async (req, res) => {
   const projectId = (req.params.projectId);
-  console.log(typeof projectId);
   const client = new MongoClient(MONGO_URI, options);
   try {
     await client.connect();

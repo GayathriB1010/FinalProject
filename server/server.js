@@ -5,7 +5,7 @@ var cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
-const { getAllProjects, addProject } = require("./projectHandler");
+const { getAllProjects, addProject,getRecentProjects} = require("./projectHandler");
 
 const {
   getAllInProgressTasks,
@@ -35,6 +35,7 @@ app.get("/api/get-users/", getUsers);
 app.get("/api/getNames/:email", getUserNames);
 app.patch("/api/update-task", updateTask);
 app.get("/api/getProjectUsers/:projectId", getprojectUsers);
+app.get("/api/get-recentProjects/:user",getRecentProjects)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

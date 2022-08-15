@@ -15,8 +15,10 @@ export const ManagefluentProvider = ({children}) => {
     const [taskClicked,setTaskClicked] = useState(false);
     const [createProjectClicked,setCreateProjectClicked] = useState(false);
     const [selectedProjectId,setSelectedProjectId] = useState(null);
+    const [recentProjects,setRecentProjects] = useState([]);
+    const [projectClicked,setProjectClicked] = useState(false);
 
 return(
-    <ManagefluentContext.Provider value={{currentUser,setCurrentUser,projects,setProjects,todoTasks,setTodoTasks,name,setName,updateTodo,setUpdateTodo,adminUsers,setAdminUsers,updateProjects,setUpdateProjects,taskClicked,setTaskClicked,createProjectClicked,setCreateProjectClicked,selectedProjectId,setSelectedProjectId}}>{children}</ManagefluentContext.Provider>
+    <ManagefluentContext.Provider value={{currentUser,setCurrentUser,projects,setProjects,todoTasks,setTodoTasks,name,setName,updateTodo,setUpdateTodo,adminUsers,setAdminUsers,updateProjects,setUpdateProjects,taskClicked,setTaskClicked,createProjectClicked,setCreateProjectClicked,selectedProjectId,setSelectedProjectId,recentProjects,setRecentProjects,projectClicked,setProjectClicked}}>{children}</ManagefluentContext.Provider>
 )
 }

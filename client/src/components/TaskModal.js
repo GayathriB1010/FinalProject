@@ -9,28 +9,47 @@ export default function TaskModal({open,taskSelected,onClose}) {
     const [taskDescription,setStateTaskDescription] = useState(null);
     const {taskClicked,setTaskClicked,selectedProjectId,setSelectedProjectId} =  useContext(ManagefluentContext);
     const [projectAdded,setProjectAdded] = useState(false);
-    const [isOpen,setIsOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState();
     const [users,setUsers] = useState([]);
     const [usersDropdownList,setUsersDropdownList] = useState([]);
     const [members,setmembers] = useState([])
    const allUsers = [];
+   const previouslySelectedOptions = [];
+   const [defaultValuesPreviouslySelected,setDefaultValuesPreviouslySelected] = useState([])
+   const [previousValuesDone,setPreviousValuesDone] = useState(false)
+   const [fetched,setFetched] = useState(false);
 
+
+   //When a task is clicked, this method gets all the users of that project
   useEffect(() =>{
-    console.log(selectedProjectId)
     const getProjectUsers = async() =>{
         const response = await fetch(`/api/getProjectUsers/${selectedProjectId}`);
         const data = await response.json();
         setUsers(data.data[0].userId)
+        //For React select, this is the data format for the options
         users.map((user) =>{
           allUsers.push({value:user,label:user});
         })
         setUsersDropdownList(allUsers);
+        setFetched(true)
     }
     if(localStorage.getItem("user")){
       getProjectUsers();
     }
 },[taskClicked]);
+
+//If there was users previously assigned to this task, those members should get displayed in the default dropdown value
+useEffect(() =>{
+  if(taskSelected !== null){
+    if(taskSelected.assignedTo.length>0){
+      taskSelected.assignedTo.map((option) =>{
+        previouslySelectedOptions.push({value:option,label:option})
+      })
+      setDefaultValuesPreviouslySelected(previouslySelectedOptions);
+    }
+    setPreviousValuesDone(true);
+  }
+},[taskSelected])
 
   const setTaskDescription = (e) =>{
     setStateTaskDescription(e.target.value);
@@ -40,16 +59,11 @@ export default function TaskModal({open,taskSelected,onClose}) {
     setSelectedOptions(data)
     }
 
-    // const previousSelection = () =>{
-    //   if(taskSelected.assignedTo.length>0){
-    //     taskSelected.assignedTo.map((option) =>{
-    //       previouslySelectedOptions.push({value:option,label:option})
-    //     })
-    //     console.log(previouslySelectedOptions)
-    //   }
-    // }
-
-  const updateTask = async() =>{
+  const updateTask = async(e) =>{
+    e.preventDefault()
+    if(taskDescription === null){
+      setStateTaskDescription(taskSelected.description)
+    }
     const assingnedMembers = [];
     selectedOptions.map((option) =>{
       assingnedMembers.push(option.value);
@@ -57,7 +71,7 @@ export default function TaskModal({open,taskSelected,onClose}) {
     const response = await fetch(`/api/update-Task`,{
     method : "PATCH",
     body : JSON.stringify({
-        taskId : '8cf9b4f0-14b1-4953-909c-ae79df591f7b',
+        taskId : taskSelected.taskId,
         description : taskDescription,
         assignedTo : assingnedMembers
     }),
@@ -67,41 +81,44 @@ export default function TaskModal({open,taskSelected,onClose}) {
 })
 .then((res) => res.json())
 .then((data) =>{
+  onClose();
+}).then((err) =>{
+  onClose();
 })
   }
 
 
     if(!open)
     {
-       return null
+      return null
     }
     else{
-      console.log(usersDropdownList)
     return(
       <Wrapper>
-      <ModalContent>
-      <Form>
+      {fetched === true?<ModalContent>
+      <Form onSubmit={(e) => updateTask(e)}>
         <Head>{taskSelected.name}</Head>
         <Label for = "taskDesc">Task Description:</Label>
         <TextArea id="taskDesc" onChange={(e) => setTaskDescription(e)}>{taskSelected.description}</TextArea>
         <Label for="access">Members:</Label>
         <div className="dropdown-container">
-        {usersDropdownList.length>0?<Select
+         <Select
+          defaultValue={defaultValuesPreviouslySelected}
           options={usersDropdownList}
           placeholder="Select members"
           value={selectedOptions}
           onChange ={handleSelect}
           isSearchable={true}
           isMulti
-        />:<LoadingWheel></LoadingWheel>}
+        />
       </div>
         <Buttons>
-       <CloseButton>Close</CloseButton>
-       <Button onClick={updateTask()}>
+       <CloseButton onClick={onClose}>Close</CloseButton>
+       <Button type='submit'>
        Save</Button>
        </Buttons>
        </Form>
-       </ModalContent>
+       </ModalContent>:<LoadingWheel></LoadingWheel>}
       </Wrapper>
     )
     }
@@ -120,6 +137,7 @@ export default function TaskModal({open,taskSelected,onClose}) {
   `
   const Label = styled.label`
   margin-top:10px;
+  font-size:15px;
   `
   
   const Input = styled.input`
@@ -170,7 +188,7 @@ export default function TaskModal({open,taskSelected,onClose}) {
   margin-right:30%;
   `
   const Head = styled.div`
-  font-size:2rem;
+  font-size:18px;
   border-bottom:1px solid lightgray;
   padding-bottom:10px;
   `

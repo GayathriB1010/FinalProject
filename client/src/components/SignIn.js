@@ -26,8 +26,8 @@ const SignIn = () => {
   }
 
   const handleSubmit = (e) =>{
-    setClicked(true);
     e.preventDefault();
+    setClicked(true);
     fetch(`/api/user?email=${email}&password=${password}`)
     .then(res => res.json())
     .then(data =>{

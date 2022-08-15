@@ -1,9 +1,14 @@
 import styled, { ServerStyleSheet } from "styled-components";
 import logo from "../images/TinyLogo.png";
 import { useNavigate } from "react-router-dom";
+import {FiLogOut} from "react-icons/fi";
 
 const Header = () =>{
     const navigate = useNavigate();
+    const logout = () =>{
+        navigate("/")
+        localStorage.setItem("user","")
+    }
 
     return(
         <>
@@ -13,7 +18,7 @@ const Header = () =>{
                 <Img src={logo}/>
                 <Name>Managefluent</Name>
                 </LogoAndName>
-             
+                <LogoutDiv><FiLogOut onClick={logout}></FiLogOut></LogoutDiv>
            </Head>
        </Wrapper>
                 </>
@@ -43,4 +48,10 @@ const LogoAndName = styled.div`
 display:flex;
 `;
 
+const LogoutDiv = styled.div`
+position:absolute;
+right:30px;
+margin-top:25px;
+color:white;
+`
 export default Header;
