@@ -12,6 +12,9 @@ export default function TaskModal({ open, taskSelected, onClose }) {
     setTaskClicked,
     selectedProjectId,
     setSelectedProjectId,
+    updateTodo,
+    setUpdateTodo,
+    defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected
   } = useContext(ManagefluentContext);
   const [projectAdded, setProjectAdded] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState();
@@ -19,15 +22,11 @@ export default function TaskModal({ open, taskSelected, onClose }) {
   const [usersDropdownList, setUsersDropdownList] = useState([]);
   const [members, setmembers] = useState([]);
   const allUsers = [];
-  const previouslySelectedOptions = [];
-  const [defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected] =
-    useState([]);
-  const [previousValuesDone, setPreviousValuesDone] = useState(false);
   const [fetched, setFetched] = useState(false);
-
-  //When a task is clicked, this method gets all the users of that project
+ 
+  //If there was users previously assigned to this task, those members should get displayed in the default dropdown value
   useEffect(() => {
-    setFetched(false);
+  //When a task is clicked, this method gets all the users of that project
     const getProjectUsers = async () => {
       const response = await fetch(`/api/getProjectUsers/${selectedProjectId}`);
       const data = await response.json();
@@ -39,26 +38,10 @@ export default function TaskModal({ open, taskSelected, onClose }) {
       setUsersDropdownList(allUsers);
       setFetched(true);
     };
-    //If there was users previously assigned to this task, those members should get displayed in the default dropdown value
-    const getPreviousValuesSelected = () => {
-      setPreviousValuesDone(false);
-      if (taskSelected !== null) {
-        if (taskSelected.assignedTo.length > 0) {
-          taskSelected.assignedTo.map((option) => {
-            previouslySelectedOptions.push({ value: option, label: option });
-          });
-          setDefaultValuesPreviouslySelected(previouslySelectedOptions);
-        } else {
-          setDefaultValuesPreviouslySelected("");
-        }
-        setPreviousValuesDone(true);
-      }
-    };
     if (localStorage.getItem("user")) {
       getProjectUsers();
-      getPreviousValuesSelected();
     }
-  }, [taskClicked]);
+  }, [taskSelected]);
 
   const setTaskDescription = (e) => {
     setStateTaskDescription(e.target.value);
@@ -68,15 +51,24 @@ export default function TaskModal({ open, taskSelected, onClose }) {
     setSelectedOptions(data);
   }
 
+
+  //This method will update the task when save is clicked
   const updateTask = async (e) => {
     e.preventDefault();
+    const assingnedMembers = [];
+    setUpdateTodo(!updateTodo);
     if (taskDescription === null) {
       setStateTaskDescription(taskSelected.description);
     }
-    const assingnedMembers = [];
+    if(selectedOptions === null || selectedOptions === undefined){
+      setSelectedOptions(taskSelected.assignedTo);
+    }
+    else{
     selectedOptions.map((option) => {
       assingnedMembers.push(option.value);
     });
+  }
+
     const response = await fetch(`/api/update-Task`, {
       method: "PATCH",
       body: JSON.stringify({
@@ -98,8 +90,8 @@ export default function TaskModal({ open, taskSelected, onClose }) {
   };
 
   if (!open) {
-    return null;
-  } else if (fetched === true && previousValuesDone == true) {
+    return null
+  } else {
     return (
       <Wrapper>
         <ModalContent>
@@ -111,7 +103,7 @@ export default function TaskModal({ open, taskSelected, onClose }) {
             </TextArea>
             <Label for="access">Members:</Label>
             <div className="dropdown-container">
-              <Select
+            <Select
                 defaultValue={defaultValuesPreviouslySelected}
                 options={usersDropdownList}
                 placeholder="Select members"
@@ -129,8 +121,6 @@ export default function TaskModal({ open, taskSelected, onClose }) {
         </ModalContent>
       </Wrapper>
     );
-  } else {
-    return null
   }
 }
 

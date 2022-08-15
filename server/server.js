@@ -13,6 +13,7 @@ const {
   addTask,
   getAllTodoTasks,
   updateTask,
+  deleteTask
 } = require("./taskHandler");
 
 const {
@@ -36,6 +37,7 @@ app.get("/api/getNames/:email", getUserNames);
 app.patch("/api/update-task", updateTask);
 app.get("/api/getProjectUsers/:projectId", getprojectUsers);
 app.get("/api/get-recentProjects/:user",getRecentProjects)
+app.delete("/api/delete-task/:taskId",deleteTask);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

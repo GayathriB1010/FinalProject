@@ -1,13 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import LoadingWheel from "./LoadingScreen";
 import { ManagefluentContext } from "./ManagefluentContext";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import TaskModal from "./TaskModal";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import TaskBoards from "./TaskBoards";
 import waterImage1 from "../images/waterImage1.png"
 
@@ -33,7 +27,6 @@ const ProjectTaskBoard = () => {
   }, [selectedProjectId]);
 
   if (users.length > 0) {
-    console.log(users)
     return (
       <MainDiv>
         <Sidebar>
@@ -47,9 +40,7 @@ const ProjectTaskBoard = () => {
             })}
           </MemberList>
         </Sidebar>
-        <DndProvider backend={HTML5Backend}>
           <TaskBoards></TaskBoards>
-        </DndProvider>
       </MainDiv>
     );
   } else {
@@ -61,13 +52,15 @@ const MainDiv = styled.div`
   display: flex;
   gap: 30px;
   background-image:url(${waterImage1})
+  height:100vh
 `;
 const Sidebar = styled.div`
   width: 15%;
   display: flex;
   flex-direction: column;
   border-right: 1px solid lightgray;
-  background: #f0f8ff;
+  background:#f2f2f2;
+  height:100vh;
 `;
 
 const DashboardIcon = styled.div`

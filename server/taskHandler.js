@@ -23,6 +23,7 @@ const getAllTodoTasks = async (req, res) => {
       .find({ projectId: projectId, status: "todo" })
       .toArray();
     if (result) {
+      console.log(result)
       res.status(200).json({ status: 200, data: result });
     } else {
       res.status(404).json({ status: 404, message: "Projects not found" });
@@ -122,10 +123,9 @@ const updateTask = async (req, res) => {
   // connect to the client
   try {
     await client.connect();
-    // connect to the database (db name is provided as an argument to the function)
+    // connect to the database 
     const db = client.db("FinalProject");
     const { description, assignedTo, taskId } = req.body;
-    //insert a name in collection users
     const result = await db.collection("tasks").findOne({ taskId:taskId});
     if (result) {
       const result1 = await db
@@ -144,8 +144,31 @@ const updateTask = async (req, res) => {
     }
   } catch (err) {
     console.log(err.stack);
+  }finally{
+    client.close();
   }
 };
+
+//deletes a task
+const deleteTask = async (req,res) =>{
+  const client = new MongoClient(MONGO_URI,options);
+  try{
+    await client.connect();
+    //connect to the database
+    const db = client.db("FinalProject");
+    const taskId = req.params.taskId;
+    console.log(taskId)
+    const result = await db.collection("tasks").deleteOne({taskId:taskId});
+    console.log(result)
+    result?
+    res.status(204).json({status:204, message:"data deleted"}):
+    res.status(404).json({status:404,message:"data not deleted"});
+  }catch(err){
+    console.log(err.stack);
+  }finally{
+    client.close();
+  }
+}
 
 module.exports = {
   getAllTodoTasks,
@@ -153,4 +176,5 @@ module.exports = {
   getAllDoneTasks,
   addTask,
   updateTask,
+  deleteTask
 };

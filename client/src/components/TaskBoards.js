@@ -1,29 +1,17 @@
-import { useDrag } from "react-dnd";
 import React from 'react'
 import { useContext, useEffect,useState } from "react"
-import { useParams } from "react-router-dom";
 import styled from "styled-components"
 import LoadingWheel from "./LoadingScreen";
 import { ManagefluentContext } from "./ManagefluentContext";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import TaskModal from "./TaskModal";
-import {DndProvider} from 'react-dnd';
-import {HTML5Backend} from 'react-dnd-html5-backend';
-
+import {FiTrash2, FiEdit} from "react-icons/fi";
+import {FiRepeat} from "react-icons/fi";
 
 export default function TaskBoards() {
-    const {todoTasks,setTodoTasks,selectedProjectId,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked} = useContext(ManagefluentContext);
+    const {todoTasks,setTodoTasks,selectedProjectId,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected} = useContext(ManagefluentContext);
     const [isOpen,setIsOpen] = useState(false);
     //To set the task selected and pass it on to the task modal
     const [taskSelected,setTaskSelected] = useState(null);
-
-    const [{isDragging},drag] = useDrag(() =>({
-        type:"div",
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        })
-    }))
 
     useEffect(() =>{
         const getAllTodoTasks = async() =>{
@@ -58,11 +46,33 @@ export default function TaskBoards() {
 
 
     const taskClickFn = (todoTask) =>{
+        let previouslySelectedOptions = [];
         setTaskClicked(!taskClicked)
         setTaskSelected(todoTask)
-        setIsOpen(true);
+        if (taskSelected !== null) {
+          //If the task is assigned to people, set the default values of dropdown to previous selected options
+          if (taskSelected.assignedTo.length > 0) {
+            taskSelected.assignedTo.map((option) => {
+              previouslySelectedOptions.push({ value: option, label: option });
+            });
+            //else if the task is not assigned to anyone, set the default values of dropdown to ""
+          }
+           setDefaultValuesPreviouslySelected(previouslySelectedOptions);
+        }
+        setIsOpen(true)
     }
 
+    const taskDeleteFn = (todoTask ) =>{
+        let taskId = todoTask.taskId;
+        console.log(taskId)
+        fetch(`/api/delete-task/${taskId}`, {
+            method: "DELETE", 
+            headers: {
+                "Content-Type": "application/json",
+              },
+          }).then((res) =>
+            setUpdateTodo(!updateTodo))
+            }
 
   return (
       <>
@@ -73,12 +83,17 @@ export default function TaskBoards() {
         <AddTask type="button" onClick={(e) => addnewTask(e)}>Add task</AddTask>
         </NewTask>
         {todoTasks!==[] ? todoTasks.map((todoTask) =>{
-            return <TodoTask onClick={() => taskClickFn(todoTask)}>{todoTask.name}{todoTask.assignedTo.map((assignee) =>{
+            return <TodoTask>{todoTask.name}{todoTask.assignedTo.map((assignee) =>{
                 return <Assignees>
                 <Assignee>
                 {assignee.split("@")[0]}
                 </Assignee></Assignees>
             })}
+            <TaskUpdateButtons>
+                <ButtonDiv><FiEdit onClick={() => taskClickFn(todoTask)}></FiEdit></ButtonDiv>
+                <ButtonDiv><FiRepeat></FiRepeat></ButtonDiv>
+                <ButtonDiv><FiTrash2 onClick={() => taskDeleteFn(todoTask)}></FiTrash2></ButtonDiv>
+            </TaskUpdateButtons>
             </TodoTask>
         }):<LoadingWheel></LoadingWheel>}
     </Todo>
@@ -108,8 +123,6 @@ border:1px solid white;
 width:25%;
 margin-top : 20px;
 box-shadow : 2px 2px 2px 2px lightgray;
-&:isDragging{
-    border:1px solid pink;
 }`
 
 const Done = styled.div`
@@ -166,4 +179,9 @@ const Assignees = styled.ul`
 display:flex;
 margin-right:0px;
 `
-
+const TaskUpdateButtons = styled.div`
+display:flex;
+`
+const ButtonDiv = styled.div`
+margin:10px;
+font-size:15px;`

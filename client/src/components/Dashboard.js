@@ -13,8 +13,8 @@ const Dashboard = () =>{
     const [isOpen,setIsOpen] = useState(false);
     const navigate = useNavigate();
     const [isAdmin,setIsAdmin] = useState(false);
-    const [users,setUsers] = useState([]);
-    const allUsers = [];
+    const [currentPage,setCurrentPage]  = useState(1);
+    const [projectsPerPage,setProjectsPerPage] = useState(9);
 
     useEffect(() =>{
         const getAllProjects = async() =>{
@@ -69,9 +69,22 @@ const Dashboard = () =>{
             })
         }
     },[localStorage.getItem("user")]);
+
+    const handlePageClick =(e) =>{
+        setCurrentPage(Number(e.target.id));
+        console.log(currentPage)
+    }
  
     
     if(projects.length > 0){
+        const indexOfLastProject = currentPage * projectsPerPage;
+        const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+        const currentProjects = projects.slice(indexOfFirstProject,indexOfLastProject)
+          // Logic for displaying page numbers
+        const pageNumbers = [];
+        for (let i = 1; i <= Math.ceil(projects.length / projectsPerPage); i++) {
+            pageNumbers.push(i);
+          }
     return(
         <PageWrapper>
         <Sidebar>
@@ -97,17 +110,27 @@ const Dashboard = () =>{
                </RecentProjectDiv>
                 </Sidebar>
         <MainDiv>
-      {projects.map((project) =>{
+      {currentProjects.map((project) =>{
           return(
            <ProjectWrapper onClick={() => navigateToProjectTasks(project.projectId)}>
            <Projects>
                 <Name>{project.projectName}</Name>
                 <Description>{project.projectDescription}</Description>
+                <CreatedBy>Project Owner: {project.createdBy}</CreatedBy>
                 </Projects>
            </ProjectWrapper>
           )
        })}
        </MainDiv>
+       {pageNumbers.map((number) =>{
+           return(
+               <Li
+               key = {number}
+               id = {number}
+               onClick = {(e) => handlePageClick(e)}
+               >{number}</Li>
+           )
+       })}
        <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
                 </ModalElement> 
        </PageWrapper>
@@ -135,6 +158,7 @@ const Dashboard = () =>{
 const Wrapper = styled.div`
 `
 const MainDiv = styled.div`
+height:100vh;
 display:flex;
 flex-wrap:wrap;
 gap:10px;
@@ -188,7 +212,8 @@ display:flex;
 flex-direction:column;
 width : 15%;
 border-right:1px solid lightgray;
-background:#F0F8FF;
+background:#f2f2f2;
+height:100vh;
 `
 const Span = styled.span`
 margin:10px;
@@ -196,7 +221,7 @@ color:#2bd4d4;
 font-size:18px;
 `
 const Projects = styled.div`
-height:75px;
+height:120px;
 border : 1px solid lightgray;
 margin :20px;
 padding : 20px;
@@ -217,4 +242,11 @@ const RecentProjectItems = styled.div`
 font-size : 15px;
 margin-bottom:15px;
 `
+const Li = styled.li`
+`
+const CreatedBy = styled.div`
+font-size : 12px;
+margin-top : 55px;
+`
+
 export default Dashboard
