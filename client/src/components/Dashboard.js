@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {FiPlusCircle} from "react-icons/fi";
 import ModalElement from "./ModalElement";
 import {FiHome} from "react-icons/fi";
-import {image1} from "../images/image1.png"
-import womanImg from "../images/computerWoman.png"
+import waterImage1 from "../images/waterImage1.png"
 
 const Dashboard = () =>{
     const {projects,setProjects,updateProjects,adminUsers,setAdminUsers,createProjectClicked,setCreateProjectClicked,setSelectedProjectId,recentProjects,setRecentProjects,projectClicked,setProjectClicked} = useContext(ManagefluentContext);
@@ -141,8 +140,7 @@ flex-wrap:wrap;
 gap:10px;
 justify-content:space-evenly;
 width:85%;
-background-image:url(${womanImg})
-
+background-image:url(${waterImage1})
 `
 const ProjectWrapper = styled.div`
 display:flex;

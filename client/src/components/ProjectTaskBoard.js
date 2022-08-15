@@ -9,6 +9,7 @@ import TaskModal from "./TaskModal";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TaskBoards from "./TaskBoards";
+import waterImage1 from "../images/waterImage1.png"
 
 const ProjectTaskBoard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,6 +60,7 @@ const ProjectTaskBoard = () => {
 const MainDiv = styled.div`
   display: flex;
   gap: 30px;
+  background-image:url(${waterImage1})
 `;
 const Sidebar = styled.div`
   width: 15%;
