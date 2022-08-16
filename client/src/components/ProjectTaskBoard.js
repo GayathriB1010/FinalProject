@@ -5,6 +5,7 @@ import { ManagefluentContext } from "./ManagefluentContext";
 import TaskBoards from "./TaskBoards";
 import waterImage1 from "../images/waterImage1.png"
 
+//This component is to display the side bar and rendering the TaskBoards
 const ProjectTaskBoard = () => {
   const [isOpen, setIsOpen] = useState(false);
   //To set the task selected and pass it on to the task modal
@@ -15,6 +16,7 @@ const ProjectTaskBoard = () => {
   const allUsers = [];
   const [userList, setUserList] = useState([]);
 
+  //This method is to get the users of the selected projecct
   useEffect(() => {
     const getProjectUsers = async () => {
       const response = await fetch(`/api/getProjectUsers/${selectedProjectId}`);
@@ -26,6 +28,7 @@ const ProjectTaskBoard = () => {
     }
   }, [selectedProjectId]);
 
+  //if there are users for the project, this will render the side bar and TaskBoards component
   if (users.length > 0) {
     return (
       <MainDiv>

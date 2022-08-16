@@ -7,12 +7,15 @@ import TaskModal from "./TaskModal";
 import {FiTrash2, FiEdit} from "react-icons/fi";
 import {FiRepeat} from "react-icons/fi";
 
+//This is the main component of task board where all the todo, inprogress and done tasks are displayed
 export default function TaskBoards() {
     const {todoTasks,setTodoTasks,selectedProjectId,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected} = useContext(ManagefluentContext);
     const [isOpen,setIsOpen] = useState(false);
     //To set the task selected and pass it on to the task modal
     const [taskSelected,setTaskSelected] = useState(null);
 
+    //This use effect will get all the todo tasks when updateTodo changes
+    //updateTodo will change when a new todo has been added, edited, deleted or the status has been changed
     useEffect(() =>{
         const getAllTodoTasks = async() =>{
             const response = await fetch(`/api/project/${selectedProjectId}/todo`);
@@ -24,10 +27,12 @@ export default function TaskBoards() {
         }
     },[updateTodo]);
 
+    //This method is to set name of the task when its created
     const newTask = (e) =>{
         setName(e.target.value);
     }
 
+    //This method is to add the task when add task button is clicked
     const addnewTask = (e) =>{
         fetch(`/api/project/${selectedProjectId}/add-task`,{
             method : "POST",
@@ -44,7 +49,7 @@ export default function TaskBoards() {
         })
     }
 
-
+    //This function will get invoked when a task is clicked
     const taskClickFn = (todoTask) =>{
         let previouslySelectedOptions = [];
         setTaskClicked(!taskClicked)
@@ -57,11 +62,13 @@ export default function TaskBoards() {
             });
             //else if the task is not assigned to anyone, set the default values of dropdown to ""
           }
+          //This is to set the default values of the members dropdown
            setDefaultValuesPreviouslySelected(previouslySelectedOptions);
         }
         setIsOpen(true)
     }
 
+    //This method will get invoked when a delete task button is clicked
     const taskDeleteFn = (todoTask ) =>{
         let taskId = todoTask.taskId;
         console.log(taskId)
@@ -71,6 +78,7 @@ export default function TaskBoards() {
                 "Content-Type": "application/json",
               },
           }).then((res) =>
+          //When the task is deleted, updateTodo will be set to !updateTodo
             setUpdateTodo(!updateTodo))
             }
 
@@ -91,7 +99,7 @@ export default function TaskBoards() {
             })}
             <TaskUpdateButtons>
                 <ButtonDiv><FiEdit onClick={() => taskClickFn(todoTask)}></FiEdit></ButtonDiv>
-                <ButtonDiv><FiRepeat></FiRepeat></ButtonDiv>
+                <ButtonDiv><FiRepeat onClick={() => taskClickFn(todoTask)}></FiRepeat></ButtonDiv>
                 <ButtonDiv><FiTrash2 onClick={() => taskDeleteFn(todoTask)}></FiTrash2></ButtonDiv>
             </TaskUpdateButtons>
             </TodoTask>

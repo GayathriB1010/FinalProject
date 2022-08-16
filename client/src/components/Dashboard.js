@@ -16,6 +16,7 @@ const Dashboard = () =>{
     const [currentPage,setCurrentPage]  = useState(1);
     const [projectsPerPage,setProjectsPerPage] = useState(9);
 
+    //This use effect is to get all projects of the signed in user. User signed in stored in local storage
     useEffect(() =>{
         const getAllProjects = async() =>{
             const response = await fetch(`/api/all-projects/${localStorage.getItem("user")}`);
@@ -27,6 +28,7 @@ const Dashboard = () =>{
         }
     },[localStorage.getItem("user"),updateProjects]);
 
+    //This use effect is to get recent projects of the signed in user
     useEffect(() =>{
         const getRecentProjects = async() =>{
             const response = await fetch(`/api/get-recentProjects/${localStorage.getItem("user")}`);
@@ -38,6 +40,7 @@ const Dashboard = () =>{
         }
     },[localStorage.getItem("user"),updateProjects]);
 
+    //This method is to navigate to the project when clicked
     const navigateToProjectTasks = (projectId) =>{
         navigate(`/project/${projectId}`);
         setSelectedProjectId(projectId);
@@ -52,6 +55,7 @@ const Dashboard = () =>{
         navigateToProjectTasks(recentProject.projectId)
     }
     
+    //This use effect is to get admin users. Only admin user can create a project. Admin users is looped through to find if the signed in user is admin
     useEffect(() =>{
         const getAdminUsers = async() =>{
             const response = await fetch(`api/get-adminUsers`);
@@ -70,12 +74,13 @@ const Dashboard = () =>{
         }
     },[localStorage.getItem("user")]);
 
+    //This method is to click pages
     const handlePageClick =(e) =>{
         setCurrentPage(Number(e.target.id));
         console.log(currentPage)
     }
  
-    
+    //If project is not null,project page is rendered
     if(projects.length > 0){
         const indexOfLastProject = currentPage * projectsPerPage;
         const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -87,6 +92,7 @@ const Dashboard = () =>{
           }
     return(
         <PageWrapper>
+        {/* Side bar displays the recent project and create project option*/}
         <Sidebar>
         <DashboardIcon>
                 <FiHome></FiHome>
@@ -121,7 +127,8 @@ const Dashboard = () =>{
            </ProjectWrapper>
           )
        })}
-       </MainDiv>
+       {/* This ul, iterates the number of pages and display each page number*/ }
+       <PageNumberul>
        {pageNumbers.map((number) =>{
            return(
                <Li
@@ -131,6 +138,8 @@ const Dashboard = () =>{
                >{number}</Li>
            )
        })}
+       </PageNumberul>
+       </MainDiv>
        <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
                 </ModalElement> 
        </PageWrapper>
@@ -148,6 +157,7 @@ const Dashboard = () =>{
                         </CreateProjectIcon><CreateProject>Create a new project</CreateProject>
                         </>: null))}
                 </NewProject>
+                {/* Project modal element is opened when is open is set and its passed as props to the modalElement*/}
                 <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
                 </ModalElement> 
                 </>
@@ -242,11 +252,28 @@ const RecentProjectItems = styled.div`
 font-size : 15px;
 margin-bottom:15px;
 `
-const Li = styled.li`
-`
+
 const CreatedBy = styled.div`
 font-size : 12px;
 margin-top : 55px;
 `
+export const Li = styled.li`
+list-style:none;
+color:#2bd4d4;
+cursor:pointer;
+width : 20px;
+align-items: center;
+margin-right:20px;
+box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288);
+`
 
+const PageNumberul = styled.ul`
+display:flex;
+width:200px;
+height:30px;
+margin-top : 10px;
+border:1px solid lightgray;
+justify-content:space-evenly;
+box-shadow : 2px 2px 2px 2px lightgray;
+`
 export default Dashboard
