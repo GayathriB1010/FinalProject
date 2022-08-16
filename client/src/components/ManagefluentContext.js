@@ -19,8 +19,10 @@ export const ManagefluentProvider = ({children}) => {
     const [projectClicked,setProjectClicked] = useState(false);
     const [defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected] = useState([]);
     const [updateTaskFeed,setupdateTaskFeed] = useState(false);
+    //To set the task selected and pass it on to the task modal
+    const [taskSelected,setTaskSelected] = useState(null);
 
 return(
-    <ManagefluentContext.Provider value={{currentUser,setCurrentUser,projects,setProjects,todoTasks,setTodoTasks,name,setName,updateTodo,setUpdateTodo,adminUsers,setAdminUsers,updateProjects,setUpdateProjects,taskClicked,setTaskClicked,createProjectClicked,setCreateProjectClicked,selectedProjectId,setSelectedProjectId,recentProjects,setRecentProjects,projectClicked,setProjectClicked,defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected,updateTaskFeed,setupdateTaskFeed,inProgressTasks,setInProgressTasks,doneTasks,setDoneTasks}}>{children}</ManagefluentContext.Provider>
+    <ManagefluentContext.Provider value={{currentUser,setCurrentUser,projects,setProjects,todoTasks,setTodoTasks,name,setName,updateTodo,setUpdateTodo,adminUsers,setAdminUsers,updateProjects,setUpdateProjects,taskClicked,setTaskClicked,createProjectClicked,setCreateProjectClicked,selectedProjectId,setSelectedProjectId,recentProjects,setRecentProjects,projectClicked,setProjectClicked,defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected,updateTaskFeed,setupdateTaskFeed,inProgressTasks,setInProgressTasks,doneTasks,setDoneTasks,taskSelected,setTaskSelected}}>{children}</ManagefluentContext.Provider>
 )
 }

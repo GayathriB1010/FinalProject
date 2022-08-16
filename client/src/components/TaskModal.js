@@ -5,9 +5,11 @@ import styled from 'styled-components';
 import Select from 'react-select';
 import LoadingWheel from './LoadingScreen';
 
-export default function TaskModal({ open, taskSelected, onClose }) {
+export default function TaskModal({ open, onClose }) {
+	
 	const [ taskDescription, setStateTaskDescription ] = useState(null);
 	const {
+		taskSelected,setTaskSelected,
 		selectedProjectId,
 		updateTaskFeed,setupdateTaskFeed
 	} = useContext(ManagefluentContext);
@@ -16,6 +18,9 @@ export default function TaskModal({ open, taskSelected, onClose }) {
 	const [ users, setUsers ] = useState([]);
 	const [ usersDropdownList, setUsersDropdownList ] = useState([]);
 	const allUsers = [];
+	if(taskSelected !== null){
+		console.log(taskSelected.assignedTo.map(dropdownValue => ({value:dropdownValue,label:dropdownValue})))
+		}
 
 	//If there was users previously assigned to this task, those members should get displayed in the default dropdown value
 	useEffect(
@@ -75,12 +80,19 @@ export default function TaskModal({ open, taskSelected, onClose }) {
 				setupdateTaskFeed(!updateTaskFeed)
 				//setDefaultValuesPreviouslySelected([]);
 				//setSelectedOptions([]);
+				setTaskSelected(null)
 				onClose();
+				
 			})
 			.then((err) => {
 				onClose();
 			});
 	};
+
+	const closeFn = () =>{
+		onClose();
+		setTaskSelected(null)
+	}
 
 	if (!open) {
 		return null;
@@ -110,7 +122,7 @@ export default function TaskModal({ open, taskSelected, onClose }) {
 							<Button type="submit">Save</Button>
 						</Buttons>
 					</Form>
-					<CloseButton onClick={onClose}>Close</CloseButton>
+					<CloseButton onClick={() => closeFn()}>Close</CloseButton>
 				</ModalContent>
 			</Wrapper>
 		);

@@ -12,10 +12,9 @@ import DoneTasks from './DoneTasks';
 
 //This is the main component of task board where all the todo, inprogress and done tasks are displayed
 export default function TaskBoards() {
-    const {todoTasks,setTodoTasks,selectedProjectId,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected,updateTaskFeed,setupdateTaskFeed} = useContext(ManagefluentContext);
+    const {todoTasks,setTodoTasks,selectedProjectId,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected,updateTaskFeed,setupdateTaskFeed,taskSelected,setTaskSelected} = useContext(ManagefluentContext);
     const [isOpen,setIsOpen] = useState(false);
-    //To set the task selected and pass it on to the task modal
-    const [taskSelected,setTaskSelected] = useState(null);
+    
     //state to set open for the taskupdateModal
     const [taskUpdateIsopen,setTaskUpdateisOpen] = useState(false);
     const [ usersDropdownList, setUsersDropdownList ] = useState([]);
@@ -58,9 +57,15 @@ export default function TaskBoards() {
     //This function will get invoked when a task is clicked
     const taskClickFn = (todoTask) =>{
         setTaskClicked(!taskClicked)
-         setTaskSelected(todoTask)
+        setTaskSelected(todoTask)
         setIsOpen(true)
     }
+
+    // useEffect(() =>{
+    //     if(taskSelected !=null){
+    //     setIsOpen(true)
+    //     }
+    // },[taskSelected])
 
     //This function will set the taskupdate modal to be true
     const taskUpdateFn = (todoTask) =>{ 
@@ -117,7 +122,7 @@ export default function TaskBoards() {
     </Done>
     <TaskModal open = {isOpen} onClose ={() => setIsOpen(false)} taskSelected = {taskSelected}>
     </TaskModal>
-    <TaskUpdateModal taskSelected = {taskSelected} open = {taskUpdateIsopen} onClose ={() => setTaskUpdateisOpen(false)}></TaskUpdateModal>
+    <TaskUpdateModal taskSelected = {taskSelected} setTaskSelected={setTaskSelected} open = {taskUpdateIsopen} onClose ={() => setTaskUpdateisOpen(false)}></TaskUpdateModal>
         </>
   )
 }
