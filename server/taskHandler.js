@@ -149,6 +149,39 @@ const updateTask = async (req, res) => {
   }
 };
 
+// updates status of an existing task
+const updateStatus = async (req, res) => {
+  // creates a new client
+  const client = new MongoClient(MONGO_URI, options);
+  // connect to the client
+  try {
+    await client.connect();
+    // connect to the database 
+    const db = client.db("FinalProject");
+    const { status } = req.body;
+    const taskId = req.params.taskId;
+    const result = await db.collection("tasks").findOne({ taskId:taskId});
+    if (result) {
+      const result1 = await db
+        .collection("tasks")
+        .updateOne(
+          { taskId: taskId },
+          { $set: { status: 
+            status, } }
+        );
+      if (result1.modifiedCount > 0) {
+        res.status(200).json({ status: 200, message: "data modified" });
+      } else {
+        res.status(404).json({ status: 404, message: "data not modified" });
+      }
+    }
+  } catch (err) {
+    console.log(err.stack);
+  }finally{
+    client.close();
+  }
+};
+
 //deletes a task
 const deleteTask = async (req,res) =>{
   const client = new MongoClient(MONGO_URI,options);
@@ -176,5 +209,6 @@ module.exports = {
   getAllDoneTasks,
   addTask,
   updateTask,
-  deleteTask
+  deleteTask,
+  updateStatus
 };

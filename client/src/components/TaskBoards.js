@@ -6,13 +6,19 @@ import { ManagefluentContext } from "./ManagefluentContext";
 import TaskModal from "./TaskModal";
 import {FiTrash2, FiEdit} from "react-icons/fi";
 import {FiRepeat} from "react-icons/fi";
+import TaskUpdateModal from "./TaskUpdateModal"
+import InprogressComponent from './InprogressComponent';
+import DoneTasks from './DoneTasks';
 
 //This is the main component of task board where all the todo, inprogress and done tasks are displayed
 export default function TaskBoards() {
-    const {todoTasks,setTodoTasks,selectedProjectId,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected} = useContext(ManagefluentContext);
+    const {todoTasks,setTodoTasks,selectedProjectId,name,setName,updateTodo,setUpdateTodo,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected,updateTaskFeed,setupdateTaskFeed} = useContext(ManagefluentContext);
     const [isOpen,setIsOpen] = useState(false);
     //To set the task selected and pass it on to the task modal
     const [taskSelected,setTaskSelected] = useState(null);
+    //state to set open for the taskupdateModal
+    const [taskUpdateIsopen,setTaskUpdateisOpen] = useState(false);
+    const [ usersDropdownList, setUsersDropdownList ] = useState([]);
 
     //This use effect will get all the todo tasks when updateTodo changes
     //updateTodo will change when a new todo has been added, edited, deleted or the status has been changed
@@ -25,7 +31,7 @@ export default function TaskBoards() {
         if(localStorage.getItem("user")){
             getAllTodoTasks();
         }
-    },[updateTodo]);
+    },[updateTodo,updateTaskFeed]);
 
     //This method is to set name of the task when its created
     const newTask = (e) =>{
@@ -51,24 +57,20 @@ export default function TaskBoards() {
 
     //This function will get invoked when a task is clicked
     const taskClickFn = (todoTask) =>{
-        let previouslySelectedOptions = [];
         setTaskClicked(!taskClicked)
-        setTaskSelected(todoTask)
-        if (taskSelected !== null) {
-          //If the task is assigned to people, set the default values of dropdown to previous selected options
-          if (taskSelected.assignedTo.length > 0) {
-            taskSelected.assignedTo.map((option) => {
-              previouslySelectedOptions.push({ value: option, label: option });
-            });
-            //else if the task is not assigned to anyone, set the default values of dropdown to ""
-          }
-          //This is to set the default values of the members dropdown
-           setDefaultValuesPreviouslySelected(previouslySelectedOptions);
-        }
+         setTaskSelected(todoTask)
         setIsOpen(true)
     }
 
-    //This method will get invoked when a delete task button is clicked
+    //This function will set the taskupdate modal to be true
+    const taskUpdateFn = (todoTask) =>{ 
+        setTaskSelected(todoTask)
+        setTaskUpdateisOpen(true)
+        setupdateTaskFeed(updateTaskFeed)
+        }
+
+
+    //This function will get invoked when a delete task button is clicked
     const taskDeleteFn = (todoTask ) =>{
         let taskId = todoTask.taskId;
         console.log(taskId)
@@ -99,7 +101,7 @@ export default function TaskBoards() {
             })}
             <TaskUpdateButtons>
                 <ButtonDiv><FiEdit onClick={() => taskClickFn(todoTask)}></FiEdit></ButtonDiv>
-                <ButtonDiv><FiRepeat onClick={() => taskClickFn(todoTask)}></FiRepeat></ButtonDiv>
+                <ButtonDiv><FiRepeat onClick={()=> taskUpdateFn(todoTask)}></FiRepeat></ButtonDiv>
                 <ButtonDiv><FiTrash2 onClick={() => taskDeleteFn(todoTask)}></FiTrash2></ButtonDiv>
             </TaskUpdateButtons>
             </TodoTask>
@@ -107,12 +109,15 @@ export default function TaskBoards() {
     </Todo>
     <InProgress>
         <Head>In Progress</Head>
+        <InprogressComponent></InprogressComponent>
     </InProgress>
     <Done>
         <Head>Done</Head>
+        <DoneTasks></DoneTasks>
     </Done>
     <TaskModal open = {isOpen} onClose ={() => setIsOpen(false)} taskSelected = {taskSelected}>
-        </TaskModal>
+    </TaskModal>
+    <TaskUpdateModal taskSelected = {taskSelected} open = {taskUpdateIsopen} onClose ={() => setTaskUpdateisOpen(false)}></TaskUpdateModal>
         </>
   )
 }
