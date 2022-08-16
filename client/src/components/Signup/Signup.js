@@ -1,4 +1,8 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
   Headings,
   H1,
@@ -20,28 +24,65 @@ import {
 //shopping cart
 //a route
 const Signup = () => {
+    const [firstName,setFirstName] = useState(null);
+    const [lastName,setLastName] = useState(null);
+    const [email,setEmail] = useState(null);
+    const [password,setPassword] = useState(null);
+
+    const singupFn = (e) =>{
+      e.preventDefault();
+      console.log(email,password,firstName,lastName)
+      fetch(`/api/create-user`,{
+        method : "POST",
+        body : JSON.stringify({
+            firstName:firstName,
+            lastName:lastName,
+            email:email,
+            password:password
+        }),
+        headers:{
+            "Content-type" :"application/json",
+        },
+    })
+    .then((res) => console.log(res.json()))
+    .then((data) =>{
+      console.log("done")
+      toast.success('User registered succesfully !', {
+        position: toast.POSITION.TOP_RIGHT
+    });
+    })
+}
+
     return (
       <>
         <Headings>
           <H1>Sign up for Managefluent!</H1>
         </Headings>
         <Wrapper>
-          <Form>
+          <Form  onSubmit={(e) => singupFn(e)}>
               <FirstName>
-                <Input type="text" placeholder="First Name" required />
+                <Input type="text" placeholder="First Name" onChange = {(e) => setFirstName(e.target.value)}required />
               </FirstName>
               <LastName>
-                <Input type="text" placeholder="Last Name" required />
+                <Input type="text" placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} required />
               </LastName>
             <Address1>
               <Input
                 type="email"
                 id="email"
                 placeholder="Email Address"
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </Address1>
-
+            <Password>
+              <Input
+                type="password"
+                id="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             <Address2>
               <Input
                 type="text"
@@ -58,25 +99,13 @@ const Signup = () => {
                 optional
               />
             </Location>
-            <Email>
-              <Input
-                type="email"
-                id="email"
-                placeholder="Email Address"
-                optional
-              />
-            </Email>
-            <Password>
-              <Input
-                type="password"
-                id="password"
-                placeholder="Password"
-                optional
-              />
+     
+         
             </Password>
             <Button type="submit">Sign Up</Button>
           </Form>
           <StyledLink to = "/SignIn">Already have an account? Sign in here!</StyledLink>
+          <ToastContainer autoClose={1000}/>
         </Wrapper>
       </>
     );

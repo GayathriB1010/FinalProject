@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { ManagefluentContext } from './ManagefluentContext';
 import Select from "react-select";
 import LoadingWheel from './LoadingScreen';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ModalElement({open,onClose}) {
   const [projectName,setStateProjectName] = useState(null);
@@ -19,6 +21,11 @@ export default function ModalElement({open,onClose}) {
 
   const addNewProject = (e) =>{
     e.preventDefault();
+    toast.success('New project created !', {
+      position: toast.POSITION.TOP_RIGHT
+  }); 
+  //This set time out is for the notification
+  setTimeout(() =>{
     const usersArray = [];
     selectedOptions.map((option) =>{
       usersArray.push(option.value);
@@ -39,8 +46,10 @@ export default function ModalElement({open,onClose}) {
     .then((res) => res.json())
     .then((data) =>{
         setUpdateProjects(!updateProjects);
+        setSelectedOptions(null);
         onClose();
     })
+  },800)
 }
 
 useEffect(() =>{
@@ -77,6 +86,7 @@ function handleSelect(data) {
   else{
   return(
     <Wrapper>
+    <ToastContainer autoClose={800}/>
     <ModalContent>
     <Form onSubmit={(e) => addNewProject(e)}>
       <Head>New Project</Head>

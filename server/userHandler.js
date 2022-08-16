@@ -120,10 +120,41 @@ const getUser = async (req, res) => {
   }
 };
 
+//This method is to create a new user while signing up
+const createUser = async(req,res) =>{
+//creates a new client
+const client = new MongoClient(MONGO_URI, options);
+try {
+  await client.connect();
+  //connect to the database
+  const db = client.db("FinalProject");
+  const { firstName,lastName,email,password } = req.body;
+  const result = await db
+    .collection("users")
+    .insertOne({
+      firstName:firstName,
+      lastName:lastName,
+      email:email,
+      password:password,
+      role:"user"
+    });
+  if (result.acknowledged) {
+    res
+      .status(201)
+      .json({ status: 201, message: "User added", data: req.body });
+  }
+} catch (err) {
+  res.status(500).json({ status: 500, message: err.message });
+} finally {
+  client.close();
+}
+};
+
 module.exports = {
   getUserRole,
   getUser,
   getUsers,
   getUserNames,
   getprojectUsers,
+  createUser
 };

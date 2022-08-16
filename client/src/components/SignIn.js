@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router';
 import { ManagefluentContext } from "./ManagefluentContext";
 import { useContext } from "react";
 import { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -38,11 +40,15 @@ const SignIn = () => {
       }
       else if(data.status === 400){
         setError(true);
-        setErrorMessage("Incorrect Password. Please try again")
+        toast.error('Incorrect Password. Please try again !', {
+          position: toast.POSITION.TOP_RIGHT
+      });
       }
       else if(data.status === 404){
         setError(true);
-        setErrorMessage("Incorrect email. Please try again");
+        toast.error('Incorrect Password. Please try again !', {
+          position: toast.POSITION.TOP_RIGHT
+      });
       }
     })
     .catch(err => {
@@ -80,6 +86,7 @@ const SignIn = () => {
         <StyledLink to="/SignUp">
           Don't have an account? Sign up for Managefluent!
         </StyledLink>
+        <ToastContainer autoClose={1000}/>
       </Wrapper>
     </>
   );

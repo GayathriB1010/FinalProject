@@ -7,6 +7,7 @@ import {FiPlusCircle} from "react-icons/fi";
 import ModalElement from "./ModalElement";
 import {FiHome} from "react-icons/fi";
 import waterImage1 from "../images/waterImage1.png"
+import { ToastContainer,toast } from "react-toastify";
 
 const Dashboard = () =>{
     const {projects,setProjects,updateProjects,adminUsers,setAdminUsers,createProjectClicked,setCreateProjectClicked,setSelectedProjectId,recentProjects,setRecentProjects,projectClicked,setProjectClicked} = useContext(ManagefluentContext);
@@ -27,6 +28,7 @@ const Dashboard = () =>{
             getAllProjects();
         }
     },[localStorage.getItem("user"),updateProjects]);
+
 
     //This use effect is to get recent projects of the signed in user
     useEffect(() =>{
@@ -128,7 +130,7 @@ const Dashboard = () =>{
           )
        })}
        {/* This ul, iterates the number of pages and display each page number*/ }
-       <PageNumberul>
+       {pageNumbers.length>1?<PageNumberul>
        {pageNumbers.map((number) =>{
            return(
                <Li
@@ -138,7 +140,7 @@ const Dashboard = () =>{
                >{number}</Li>
            )
        })}
-       </PageNumberul>
+       </PageNumberul>:null}
        </MainDiv>
        <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
                 </ModalElement> 
@@ -148,6 +150,7 @@ const Dashboard = () =>{
     else{
         return (
             <>
+            <ToastContainer/>
             <NewProject>
                 {adminUsers.map((adminUser) =>(
                     adminUser.email === localStorage.getItem("user")? 

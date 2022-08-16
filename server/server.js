@@ -23,6 +23,7 @@ const {
   getUser,
   getUserNames,
   getprojectUsers,
+  createUser
 } = require("./userHandler");
 
 app.get("/api/all-projects/:user", getAllProjects);
@@ -40,6 +41,7 @@ app.get("/api/getProjectUsers/:projectId", getprojectUsers);
 app.get("/api/get-recentProjects/:user",getRecentProjects)
 app.delete("/api/delete-task/:taskId",deleteTask);
 app.patch("/api/updateStatus/:taskId",updateStatus)
+app.post("/api/create-user",createUser);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
