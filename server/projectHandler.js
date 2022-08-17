@@ -101,14 +101,11 @@ const deleteProject = async (req,res) =>{
     //connect to the database
     const db = client.db("FinalProject");
     const projectId = req.params.projectId;
-    console.log(projectId)
     const result = await db.collection("projects").deleteOne({projectId:projectId});
-    console.log(result)
     result?
     res.status(204).json({status:204, message:"data deleted"}):
     res.status(404).json({status:404,message:"data not deleted"});
   }catch(err){
-    console.log(err.stack);
   }finally{
     client.close();
   }

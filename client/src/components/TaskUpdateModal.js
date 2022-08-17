@@ -53,6 +53,12 @@ export default function TaskModal({ open,taskSelected,onClose,usersDropdownList 
 		setStatus("todo")
 	}
 
+	const closeFn = (e) =>{
+		e.preventDefault();
+		e.stopPropagation();
+		onClose();
+	}
+	
 	if (!open) {
 		return null;
 	} else {
@@ -68,9 +74,9 @@ export default function TaskModal({ open,taskSelected,onClose,usersDropdownList 
 						</StatusUpdateButtons>
 						<Buttons>
 							<Button type="submit">Save</Button>
+							<CloseButton onClick={(e) => closeFn(e)}>Close</CloseButton>
 						</Buttons>
 					</Form>
-					<CloseButton onClick={onClose}>Close</CloseButton>
 				</ModalContent>
 			</Wrapper>
 		);
@@ -91,27 +97,35 @@ const Wrapper = styled.div`
 
 const Button = styled.button`
 	margin: 10px 10px 10px 10px;
-	padding: 10px;
-	margin-bottom: 10px;
+	padding: 5px;
 	color: white;
 	background: none;
 	border: 1px solid white;
 	border-radius: 10px;
-	font-family: "Montserrat", sans-serif;
+	font:var(--font);
+	font-size:15px;
 	background: #2bd4d4;
 	border: none;
+	&:hover{
+		cursor:pointer;
+	}
 `;
 const CloseButton = styled.button`
-	margin: 10px 10px 10px 10px;
+	margin: 10px 10px 10px 5px;
 	padding: 10px;
 	margin-bottom: 10px;
-	color: white;
+	color: black;
 	background: none;
 	border: 1px solid white;
 	border-radius: 10px;
-	font-family: "Montserrat", sans-serif;
-	background: red;
+	font:var(--font);
+	font-size:15px;
+	background: none;
 	border: none;
+	&:hover{
+		background: #f2f2f2;
+		cursor:pointer;
+	}
 `;
 
 const ModalContent = styled.div`padding: 20px;`;

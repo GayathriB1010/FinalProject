@@ -56,7 +56,9 @@ const Dashboard = () =>{
     }
 
     const projectClickedFn = (recentProject) =>{
-        navigateToProjectTasks(recentProject.projectId)
+        navigate(`/project/${recentProject.projectId}`);
+        setSelectedProjectId(recentProject.projectId);
+        setSelectedProjectProperties(recentProject);
     }
     
     //This use effect is to get admin users. Only admin user can create a project. Admin users is looped through to find if the signed in user is admin
@@ -81,7 +83,6 @@ const Dashboard = () =>{
     //This method is to click pages
     const handlePageClick =(e) =>{
         setCurrentPage(Number(e.target.id));
-        console.log(currentPage)
     }
  
     //If project is not null,project page is rendered
@@ -95,6 +96,7 @@ const Dashboard = () =>{
             pageNumbers.push(i);
           }
     return(
+        <>
         <PageWrapper>
         {/* Side bar displays the recent project and create project option*/}
         <Sidebar>
@@ -122,31 +124,30 @@ const Dashboard = () =>{
         <MainDiv>
       {currentProjects.map((project) =>{
           return(
-           <ProjectWrapper>
            <Projects onClick={() => navigateToProjectTasks(project)}>
                 <Name>{project.projectName}</Name>
                 <Description>{project.projectDescription}</Description>
                 <CreatedBy>Project Owner: {project.createdBy}</CreatedBy>
                 </Projects>
-           </ProjectWrapper>
           )
        })}
-       {/* This ul, iterates the number of pages and display each page number*/ }
-       {pageNumbers.length>1?<PageNumberul>
-       {pageNumbers.map((number) =>{
-           return(
-               <Li
-               key = {number}
-               id = {number}
-               onClick = {(e) => handlePageClick(e)}
-               >{number}</Li>
-           )
-       })}
-       </PageNumberul>:null}
        </MainDiv>
        <ModalElement open = {isOpen} onClose ={() => setIsOpen(false)}>
                 </ModalElement> 
        </PageWrapper>
+          {/* This ul, iterates the number of pages and display each page number*/ }
+          {pageNumbers.length>1?<PageNumberul>
+            {pageNumbers.map((number) =>{
+                return(
+                    <Li
+                    key = {number}
+                    id = {number}
+                    onClick = {(e) => handlePageClick(e)}
+                    >{number}</Li>
+                )
+            })}
+            </PageNumberul>:null}
+            </>
     )
 }
     else{
@@ -176,18 +177,29 @@ const MainDiv = styled.div`
 height:100vh;
 display:flex;
 flex-wrap:wrap;
-gap:10px;
 justify-content:space-evenly;
 width:85%;
+height:90%;
 background-image:url(${waterImage1})
 `
 const ProjectWrapper = styled.div`
 display:flex;
 flex-direction:column;
 flex-wrap:wrap;
-flex: 0 0 25%;
+
 
 `
+const Projects = styled.div`
+height:120px;
+border : 1px solid lightgray;
+margin :20px;
+padding : 20px;
+box-shadow : 2px 2px 2px 2px lightgray;
+width:400px;
+cursor:pointer;
+&:hover{transform: scale(1.01)}
+`
+
 const Description = styled.div`
 color:black;
 margin-top : 10px;
@@ -211,6 +223,10 @@ margin : 0 0 20px 30px;
 const CreateProjectIcon = styled.div`
 margin-top :10px;
 font-size:15px;
+cursor:pointer;
+&:hover{
+    color:orange;
+}
 `
 const PageWrapper = styled.div`
 display:flex;
@@ -235,14 +251,6 @@ margin:10px;
 color:#2bd4d4;
 font-size:18px;
 `
-const Projects = styled.div`
-height:120px;
-border : 1px solid lightgray;
-margin :20px;
-padding : 20px;
-box-shadow : 2px 2px 2px 2px lightgray;
-width:400px;
-`
 
 const RecentProjects = styled.div`
 font-size : 18px;
@@ -256,6 +264,10 @@ margin : 20px 0 20px 30px;
 const RecentProjectItems = styled.div`
 font-size : 15px;
 margin-bottom:15px;
+cursor:pointer;
+&:hover{
+    color:orange;
+}
 `
 
 const CreatedBy = styled.div`
@@ -266,20 +278,27 @@ export const Li = styled.li`
 list-style:none;
 color:#2bd4d4;
 cursor:pointer;
-width : 20px;
-align-items: center;
-margin-right:20px;
+text-align: center;
+border:1px solid #ddd;
+display: inline-block;
+width:50px;
+height:20px;
+color:black;
+font-size:15px;
 box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288);
+background: #dde1e7;
+margin: 0px 5px;
+border-radius: 3px;
+&:hover{transform: scale(1.1)}
 `
 
 const PageNumberul = styled.ul`
-display:flex;
 width:200px;
-height:30px;
-margin-top : 10px;
-border:1px solid lightgray;
-justify-content:space-evenly;
-box-shadow : 2px 2px 2px 2px lightgray;
+position:absolute;
+bottom:100px;
+right:40%;
+padding: 25px;
+  border-radius: 3px;
 `
 
 export default Dashboard

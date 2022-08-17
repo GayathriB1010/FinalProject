@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -28,10 +28,10 @@ const Signup = () => {
     const [lastName,setLastName] = useState(null);
     const [email,setEmail] = useState(null);
     const [password,setPassword] = useState(null);
+    const navigate = useNavigate();
 
     const singupFn = (e) =>{
       e.preventDefault();
-      console.log(email,password,firstName,lastName)
       fetch(`/api/create-user`,{
         method : "POST",
         body : JSON.stringify({
@@ -46,10 +46,10 @@ const Signup = () => {
     })
     .then((res) => console.log(res.json()))
     .then((data) =>{
-      console.log("done")
       toast.success('User registered succesfully !', {
         position: toast.POSITION.TOP_RIGHT
     });
+    navigate("/signin")
     })
 }
 

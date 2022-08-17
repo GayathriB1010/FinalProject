@@ -39,6 +39,7 @@ export default function TaskBoards() {
 
     //This method is to add the task when add task button is clicked
     const addnewTask = (e) =>{
+        if(name !== null){
         fetch(`/api/project/${selectedProjectId}/add-task`,{
             method : "POST",
             body : JSON.stringify({
@@ -52,6 +53,7 @@ export default function TaskBoards() {
         .then((data) =>{
             setUpdateTodo(!updateTodo);
         })
+    }
     }
 
     //This function will get invoked when a task is clicked
@@ -78,7 +80,6 @@ export default function TaskBoards() {
     //This function will get invoked when a delete task button is clicked
     const taskDeleteFn = (todoTask ) =>{
         let taskId = todoTask.taskId;
-        console.log(taskId)
         fetch(`/api/delete-task/${taskId}`, {
             method: "DELETE", 
             headers: {
@@ -103,7 +104,9 @@ export default function TaskBoards() {
                 <Assignee>
                 {assignee.split("@")[0]}
                 </Assignee></Assignees>
+
             })}
+            {todoTask.documents?<><GoogleDocUrl><StyledLink href={todoTask.documents}>Click here to open the Attachment</StyledLink></GoogleDocUrl></>:null}
             <TaskUpdateButtons>
                 <ButtonDiv><FiEdit onClick={() => taskClickFn(todoTask)}></FiEdit></ButtonDiv>
                 <ButtonDiv><FiRepeat onClick={()=> taskUpdateFn(todoTask)}></FiRepeat></ButtonDiv>
@@ -203,3 +206,14 @@ display:flex;
 const ButtonDiv = styled.div`
 margin:10px;
 font-size:15px;`
+
+const GoogleDocUrl = styled.div``
+
+const StyledLink = styled.a`
+font:var(--font);
+font-size:12px;
+color:blue;
+margin-left:10px;
+display: "table-cell"
+margin-bottom:10px;
+`

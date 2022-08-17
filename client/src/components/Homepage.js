@@ -108,7 +108,7 @@ const Li = styled.li`
 margin:10px;
 `
 export const StyledLink = styled(Link)`
-margin: 20px 20px 10px 20px;
+margin: 20px 10px 10px 10px;
 color : #3333ff;
 font:var(--font);
 font-size:1rem;

@@ -23,7 +23,6 @@ const getAllTodoTasks = async (req, res) => {
       .find({ projectId: projectId, status: "todo" })
       .toArray();
     if (result) {
-      console.log(result)
       res.status(200).json({ status: 200, data: result });
     } else {
       res.status(404).json({ status: 404, message: "Projects not found" });
@@ -191,9 +190,7 @@ const deleteTask = async (req,res) =>{
     //connect to the database
     const db = client.db("FinalProject");
     const taskId = req.params.taskId;
-    console.log(taskId)
     const result = await db.collection("tasks").deleteOne({taskId:taskId});
-    console.log(result)
     result?
     res.status(204).json({status:204, message:"data deleted"}):
     res.status(404).json({status:404,message:"data not deleted"});

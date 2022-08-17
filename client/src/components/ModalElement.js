@@ -93,9 +93,9 @@ function handleSelect(data) {
     <Form onSubmit={(e) => addNewProject(e)}>
       <Head>New Project</Head>
       <Label for= "projectName">Project Name:</Label>
-      <Input id="projectName" type = "text" onChange={(e) => setProjectName(e)}></Input>
+      <Input id="projectName" type = "text" onChange={(e) => setProjectName(e)}required></Input>
       <Label for = "projectDesc">Project Description:</Label>
-      <TextArea onChange={(e) => setProjectDescription(e)}></TextArea>
+      <TextArea onChange={(e) => setProjectDescription(e)} required></TextArea>
       <Label for = "access">Access:</Label>
       <Access className="dropdown-container">
         {usersDropdownList.length>0?<SelectDD
@@ -105,6 +105,7 @@ function handleSelect(data) {
           onChange ={handleSelect}
           isSearchable={true}
           isMulti
+          required
         />:<LoadingWheel></LoadingWheel>}
       </Access>
       <Buttons>

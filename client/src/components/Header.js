@@ -2,23 +2,34 @@ import styled, { ServerStyleSheet } from "styled-components";
 import logo from "../images/TinyLogo.png";
 import { useNavigate } from "react-router-dom";
 import {FiLogOut} from "react-icons/fi";
+import { ManagefluentContext } from "./ManagefluentContext";
+import { useContext } from "react";
 
 const Header = () =>{
+    const {currentUser,setCurrentUser} = useContext(ManagefluentContext);
     const navigate = useNavigate();
+
     const logout = () =>{
         navigate("/")
+        setCurrentUser("");
         localStorage.setItem("user","")
+    }
+    
+    const navigateToDashboard = () =>{
+    if(localStorage.getItem("user")){
+        navigate("/dashboard")
+    }
     }
 
     return(
         <>
        <Wrapper>
            <Head>
-                <LogoAndName onClick={() => navigate("/dashboard")}>
+                <LogoAndName onClick={() => navigateToDashboard()}>
                 <Img src={logo}/>
                 <Name>Managefluent</Name>
                 </LogoAndName>
-                <LogoutDiv><FiLogOut onClick={logout}></FiLogOut></LogoutDiv>
+                {currentUser?<LogoutDiv><FiLogOut onClick={logout}></FiLogOut></LogoutDiv>:null}
            </Head>
        </Wrapper>
                 </>

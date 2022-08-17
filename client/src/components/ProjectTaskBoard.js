@@ -6,6 +6,7 @@ import TaskBoards from "./TaskBoards";
 import waterImage1 from "../images/waterImage1.png"
 import {FiTrash2, FiEdit,FiCheckSquare} from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 //This component is to display the side bar and rendering the TaskBoards
 const ProjectTaskBoard = () => {
@@ -31,6 +32,7 @@ const ProjectTaskBoard = () => {
     }
   }, [selectedProjectId]);
 
+  
          //This function will get invoked when a delete project button is clicked
          const projectDeleteFn = (project) =>{
           fetch(`/api/delete-project/${project.projectId}`, {

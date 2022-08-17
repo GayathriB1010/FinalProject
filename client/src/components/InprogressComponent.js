@@ -33,19 +33,16 @@ export default function InprogressComponent() {
         let previouslySelectedOptions = [];
         setTaskClicked(!taskClicked)
         setTaskSelected(todoTask)
-        if (taskSelected !== null) {
-          //If the task is assigned to people, set the default values of dropdown to previous selected options
-          if (taskSelected.assignedTo.length > 0) {
-              console.log(taskSelected.assignedTo)
-            taskSelected.assignedTo.map((option) => {
-              previouslySelectedOptions.push({ value: option, label: option });
-            });
-            //else if the task is not assigned to anyone, set the default values of dropdown to ""
-          }
-          //This is to set the default values of the members dropdown
-           setDefaultValuesPreviouslySelected(previouslySelectedOptions);
-           console.log(previouslySelectedOptions)
-        }
+        // if (taskSelected !== null) {
+        //   //If the task is assigned to people, set the default values of dropdown to previous selected options
+        //   if (taskSelected.assignedTo.length > 0) {
+        //     taskSelected.assignedTo.map((option) => {
+        //       previouslySelectedOptions.push({ value: option, label: option });
+        //     });
+        //     //else if the task is not assigned to anyone, set the default values of dropdown to ""
+        //   }
+    
+        // }
         setIsOpen(true)
     }
 
@@ -59,7 +56,6 @@ export default function InprogressComponent() {
     //This function will get invoked when a delete task button is clicked
     const taskDeleteFn = (todoTask ) =>{
         let taskId = todoTask.taskId;
-        console.log(taskId)
         fetch(`/api/delete-task/${taskId}`, {
             method: "DELETE", 
             headers: {
@@ -80,6 +76,7 @@ export default function InprogressComponent() {
                 {assignee.split("@")[0]}
                 </Assignee></Assignees>
             })}
+               {inProgressTask.documents?<><GoogleDocUrl><StyledLink href={inProgressTask.documents}>Click here to open the Attachment</StyledLink></GoogleDocUrl></>:null}
             <TaskUpdateButtons>
                 <ButtonDiv><FiEdit onClick={() => taskClickFn(inProgressTask)}></FiEdit></ButtonDiv>
                 <ButtonDiv><FiRepeat onClick={()=> taskUpdateFn(inProgressTask)}></FiRepeat></ButtonDiv>
@@ -133,3 +130,13 @@ display:flex;
 const ButtonDiv = styled.div`
 margin:10px;
 font-size:15px;`
+const GoogleDocUrl = styled.div``
+
+const StyledLink = styled.a`
+font:var(--font);
+font-size:12px;
+color:blue;
+margin-left:10px;
+display: "table-cell"
+margin-bottom:10px;
+`
