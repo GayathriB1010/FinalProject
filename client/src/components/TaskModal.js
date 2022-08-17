@@ -99,8 +99,6 @@ export default function TaskModal({ open, onClose }) {
 
 	const handleOpenPicker = () => {
 		openPicker({
-		  clientId:"688130310661-lbtn1a352pvcb8q8t6p8hajdnn8mffeb.apps.googleusercontent.com",
-		  developerKey:"AIzaSyB_TajnS_zbw4tmprQzEo113s5xHxGnVNk",
 		  viewId: "DOCS",
       // token: token, // pass oauth token in case you already have one
       showUploadView: true,

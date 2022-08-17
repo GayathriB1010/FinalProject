@@ -2,9 +2,7 @@ import styled from "styled-components";
 import womanImg from "../images/computerWoman.png"
 import { useNavigate } from "react-router-dom";
 import checklist from "../images/checklist.png";
-import completed from  "../images/completed.png";
-import workflow from "../images/workflow.png";
-
+import { Link } from "react-router-dom";
 
 const Homepage = () =>{
     let navigate = useNavigate();
@@ -19,6 +17,7 @@ return(
                 A space where you can easily manage all your project tasks.
             </WelcomeMessage>
             <Button type ="submit" onClick={() =>navigate("/Signup")}>Sign Up</Button>
+            <StyledLink to = "/SignIn">Already have an account? Sign in here!</StyledLink>
         </AppDesc>
         <CheckListImg src = {checklist}/>
     </Wrapper>
@@ -108,5 +107,13 @@ margin-left : 100px;
 const Li = styled.li`
 margin:10px;
 `
+export const StyledLink = styled(Link)`
+margin: 20px 20px 10px 20px;
+color : #3333ff;
+font:var(--font);
+font-size:1rem;
+color:white;
+`
+
 
 export default Homepage;
