@@ -2,13 +2,15 @@ import React from 'react';
 import { useContext } from 'react';
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { ManagefluentContext } from './ManagefluentContext';
-import Select from "react-select";
 import LoadingWheel from './LoadingScreen';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+  Wrapper,Label,Input,Button,CloseButton,TextArea,ModalContent,Form,Head,Buttons,Access,SelectDD
+} from "./ModalElementStyledComponent"
 
+//This component opens when create project button is clicked
 export default function ModalElement({open,onClose}) {
   const [projectName,setStateProjectName] = useState(null);
   const [projectDescription,setStateProjectDescription] = useState(null);
@@ -19,6 +21,7 @@ export default function ModalElement({open,onClose}) {
   const [usersDropdownList,setUsersDropdownList] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState();
 
+  //This method will get invoked when create project button is clicked
   const addNewProject = (e) =>{
     e.preventDefault();
     toast.success('New project created !', {
@@ -52,6 +55,7 @@ export default function ModalElement({open,onClose}) {
   },800)
 }
 
+//This is to fetch all the users in the db, to display in access members dropdown while creating the project
 useEffect(() =>{
   const getAllUsers = async() =>{
       const response = await fetch(`/api/get-users/`);
@@ -120,83 +124,3 @@ function handleSelect(data) {
   }
 }
 
-const Wrapper = styled.div`
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 10%;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-`
-const Label = styled.label`
-margin-top:10px;
-font-size:15px;
-`
-
-const Input = styled.input`
-width:95%;
-padding:10px;
-margin:10px 0 10px 0;
-border:1px solid lightgray;
-`
-
-const Button = styled.button`
-margin:10px 10px 10px 10px;
-padding:10px;
-margin-bottom:10px;
-color:white;
-background:none;
-border:1px solid white;
-border-radius : 10px;
-font-family: 'Montserrat', sans-serif;
-background:#2bd4d4;
-border:none;
-`
-const CloseButton = styled.button`
-margin:10px 10px 10px 10px;
-padding:10px;
-margin-bottom:10px;
-color:white;
-background:none;
-border:1px solid white;
-border-radius : 10px;
-font-family: 'Montserrat', sans-serif;
-background:red;
-border:none;
-`
-const TextArea = styled.textarea`
-width:95%;
-padding:10px;
-margin:10px 0 10px 0;
-border:1px solid lightgray;`
-
-const ModalContent = styled.div`
-padding:20px;
-`
-
-const Form = styled.form`
-display : flex;
-flex-direction:column;
-padding:20px;
-background:white;
-margin-left:30%;
-margin-right:30%;
-`
-const Head = styled.div`
-font-size:18px;
-border-bottom:1px solid lightgray;
-padding-bottom:10px;
-`
-const Buttons = styled.div`
-
-`
-const Access = styled.div``
-
-const SelectDD = styled(Select)`
-margin:10px 0 10px 0;
-width:100%;
-padding-right:10px;
-`

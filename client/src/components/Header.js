@@ -9,12 +9,14 @@ const Header = () =>{
     const {currentUser,setCurrentUser} = useContext(ManagefluentContext);
     const navigate = useNavigate();
 
+    //This method will logout when logout button is clicked
     const logout = () =>{
         navigate("/")
         setCurrentUser("");
         localStorage.setItem("user","")
     }
     
+    //This method will navigate to the dashboard
     const navigateToDashboard = () =>{
     if(localStorage.getItem("user")){
         navigate("/dashboard")

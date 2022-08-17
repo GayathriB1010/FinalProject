@@ -17,6 +17,7 @@ const SignIn = () => {
   const [clicked,setClicked] = useState(false);
   const [errorMessage,setErrorMessage] = useState(null);
 
+  //This will set email and password when the target is changed
   const handleInput = (e) =>{
     switch(e.target.id){
       case "email":
@@ -28,26 +29,30 @@ const SignIn = () => {
     }
   }
 
+  //This will fetch the user with the email and password entered
   const handleSubmit = (e) =>{
     e.preventDefault();
     setClicked(true);
     fetch(`/api/user?email=${email}&password=${password}`)
     .then(res => res.json())
     .then(data =>{
+      //If the status is 200, then email is set to current user and navigated to dashboard
       if(data.status === 200){
         setCurrentUser(email);
         localStorage.setItem("user",email);
         navigate("/dashboard")
       }
+      //If the status is 400, this will show the error notification of incorrect password
       else if(data.status === 400){
         setError(true);
-        toast.error('Incorrect Password. Please try again !', {
+        toast.error('Incorrect password. Please try again !', {
           position: toast.POSITION.TOP_RIGHT
       });
       }
+       //If the status is 404, this will show the error notification of incorrect user
       else if(data.status === 404){
         setError(true);
-        toast.error('Incorrect Password. Please try again !', {
+        toast.error('Incorrect email. Please try again !', {
           position: toast.POSITION.TOP_RIGHT
       });
       }

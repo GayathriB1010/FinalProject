@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import checklist from "../images/checklist.png";
 import { Link } from "react-router-dom";
 
+//This component is the homepage which displays what the application does
 const Homepage = () =>{
     let navigate = useNavigate();
 return(

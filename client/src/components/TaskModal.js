@@ -1,14 +1,14 @@
 import React from 'react';
 import { useState, useContext, useEffect } from 'react';
 import { ManagefluentContext } from './ManagefluentContext';
-import styled from 'styled-components';
-import Select from 'react-select';
 import LoadingWheel from './LoadingScreen';
 import useDrivePicker from "react-google-drive-picker";
-import { Link } from "react-router-dom";
+
+import{TaskName,Members,HeadAndClose,DisplayMembers,GoogleDocUrl,SelectDropDown,StyledLink,TextArea,ModalContent,Form,Head,Buttons,AddToCard,Wrapper,Label,Input,Button,CloseButton,GoogleDriveButton
+} from "./TaskModalStyledComponent"
 
 export default function TaskModal({ open, onClose }) {
-	const [ taskDescription, setStateTaskDescription ] = useState(null);
+	const [ taskDescription, setStateTaskDescription ] = useState("");
 	const {
 		taskSelected,setTaskSelected,
 		selectedProjectId,
@@ -62,14 +62,14 @@ export default function TaskModal({ open, onClose }) {
     selectedOptions.map((option) => {
       assingnedMembers.push(option.value);
     });
-  }
+}
 		const response = await fetch(`/api/update-Task`, {
 			method: 'PATCH',
 			body: JSON.stringify({
 				taskId: taskSelected.taskId,
 				description: taskDescription,
 				assignedTo: assingnedMembers,
-				documents : googleDocUrl
+				documents : googleDocUrl?googleDocUrl:taskSelected.documents
 			}),
 			headers: {
 				'Content-type': 'application/json'
@@ -103,8 +103,8 @@ export default function TaskModal({ open, onClose }) {
 		e.preventDefault();
 		e.stopPropagation();
 		openPicker({
-		  clientId:"688130310661-ja83lc3m7ir6m0nbu6o162m8ldbdch9v.apps.googleusercontent.com",
-		  developerKey:"AIzaSyCk_4s_82guXLtg-qWbGcwn92AceiDSn2Y",
+		  clientId:"688130310661-9t6eun1j9hskmdk7rf0umpp9ecadlae3.apps.googleusercontent.com",
+		  developerKey:"AIzaSyD-4L9yhAe7p73oL4a1ic04CvKEbDsQu7c",
 		  viewId: "DOCS",
       // token: token, // pass oauth token in case you already have one
       showUploadView: true,
@@ -150,8 +150,6 @@ export default function TaskModal({ open, onClose }) {
 						{taskSelected.documents!==""?
 						<>
 						<GoogleDocUrl><StyledLink href={taskSelected.documents}>Click here to open the Attachment</StyledLink></GoogleDocUrl></>:null}
-						{googleDocUrl!==""?	<>	<GoogleDocUrl><StyledLink  href={taskSelected.documents} target = "_blank" 
-						rel = "noopener noreferrer">Click here to open the Attachment</StyledLink></GoogleDocUrl></>:null}
 						<Buttons>
 							<Button type="submit">Save</Button>
 							<CloseButton onClick={(e) => closeFn(e)}>Close</CloseButton>
@@ -163,128 +161,3 @@ export default function TaskModal({ open, onClose }) {
 	}
 }
 
-const Wrapper = styled.div`
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	left: 0;
-	top: 10%;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgb(0, 0, 0); /* Fallback color */
-	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-`;
-const Label = styled.label`
-	margin-top: 10px;
-	font-size: 15px;
-`;
-
-const Input = styled.input`
-	width: 95%;
-	padding: 10px;
-	margin: 10px 0 10px 0;
-`;
-
-const Button = styled.button`
-	margin: 10px 10px 10px 10px;
-	padding: 5px;
-	color: white;
-	background: none;
-	border: 1px solid white;
-	border-radius: 10px;
-	font:var(--font);
-	font-size:15px;
-	background: #2bd4d4;
-	border: none;
-	&:hover{
-		cursor:pointer;
-	}
-`;
-const CloseButton = styled.button`
-	margin: 10px 10px 10px 5px;
-	padding: 10px;
-	margin-bottom: 10px;
-	color: black;
-	background: none;
-	border: 1px solid white;
-	border-radius: 10px;
-	font:var(--font);
-	font-size:15px;
-	background: none;
-	border: none;
-	&:hover{
-		background: #f2f2f2;
-		cursor:pointer;
-	}
-`;
-const GoogleDriveButton = styled.button`
-margin: 10px 10px 10px 0px;
-	padding: 10px;
-	color: black;
-	border: 1px solid white;
-	border-radius: 10px;
-	font:var(--font);
-	background: red;
-	border: none;
-	width:100px;
-	font-size:15px;
-	background:#f2f2f2;
-`
-
-const TextArea = styled.textarea`
-	width: 95%;
-	padding: 10px;
-	margin: 10px 0 10px 0;
-`;
-
-const ModalContent = styled.div`padding: 20px;`;
-
-const Form = styled.form`
-	display: flex;
-	flex-direction: column;
-	padding: 20px;
-	background: white;
-	margin-left: 30%;
-	margin-right: 30%;
-`;
-const Head = styled.div`
-	font-size: 18px;
-	border-bottom: 1px solid lightgray;
-	padding-bottom: 10px;
-`;
-const Buttons = styled.div``;
-const AddToCard = styled.button`
-	margin: 10px 10px 10px 10px;
-	padding: 10px;
-	margin-bottom: 10px;
-	color: white;
-	background: none;
-	border: 1px solid white;
-	border-radius: 10px;
-	font:var(--font);
-	background: lightgray;
-	border: none;
-	width: 30%;
-`;
-
-const TaskName = styled.div`margin-bottom: 10px;`;
-
-const Members = styled.div``;
-
-const HeadAndClose = styled.div`display: flex;`;
-const DisplayMembers = styled.div``;
-
-const GoogleDocUrl = styled.div``
-
-const SelectDropDown = styled(Select)`
-font-size:15px;
-margin-top:10px;
-`
-
-const StyledLink = styled.a`
-font:var(--font);
-font-size:15px;
-color:blue;
-margin-left:10px;
-display: "table-cell"
-`

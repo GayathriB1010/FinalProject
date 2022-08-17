@@ -33,6 +33,7 @@ export default function TaskModal({ open,taskSelected,onClose,usersDropdownList 
 			setupdateTaskFeed(!updateTaskFeed)
 	};
 
+	//When the status done button is clicked, status is set as done
 	const updateDoneStatus = ((e) =>{
 		e.preventDefault();
 		e.target.style.backgroundColor = 'green';
@@ -40,12 +41,15 @@ export default function TaskModal({ open,taskSelected,onClose,usersDropdownList 
 		setStatus("done")
 	})
 
+	//When the status in progress button is clicked, status is set as in progress
 	const updateInprogressStatus = (e) =>{
 		e.preventDefault();
 		e.target.style.backgroundColor = 'blue';
 		e.target.style.color = 'white';
 		setStatus("inProgress")
 	}
+
+	//When the status todo button is clicked, status is set as todo
 	const updateTodoStatus = (e) =>{
 		e.preventDefault();
 		e.target.style.backgroundColor = 'salmon';

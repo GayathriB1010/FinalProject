@@ -8,6 +8,10 @@ import {FiTrash2, FiEdit} from "react-icons/fi";
 import {FiRepeat} from "react-icons/fi";
 import TaskUpdateModal from "./TaskUpdateModal"
 
+import {
+    Assignee,Assignees,TaskUpdateButtons,ButtonDiv,GoogleDocUrl,StyledLink
+} from "./TaskboardCommonStyledComponents"
+
 export default function InprogressComponent() {
     const {inProgressTasks,setInProgressTasks,selectedProjectId,name,setName,updateTaskFeed,setupdateTaskFeed,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected,taskSelected,setTaskSelected} = useContext(ManagefluentContext);
 
@@ -33,16 +37,6 @@ export default function InprogressComponent() {
         let previouslySelectedOptions = [];
         setTaskClicked(!taskClicked)
         setTaskSelected(todoTask)
-        // if (taskSelected !== null) {
-        //   //If the task is assigned to people, set the default values of dropdown to previous selected options
-        //   if (taskSelected.assignedTo.length > 0) {
-        //     taskSelected.assignedTo.map((option) => {
-        //       previouslySelectedOptions.push({ value: option, label: option });
-        //     });
-        //     //else if the task is not assigned to anyone, set the default values of dropdown to ""
-        //   }
-    
-        // }
         setIsOpen(true)
     }
 
@@ -111,37 +105,4 @@ box-shadow : 2px 2px 2px 2px lightgray;
 padding : 20px;
 color:black;
 font-size:15px;
-`
-
-const Assignee = styled.li`
-border:1px solid lightgray;
-align-items:center;
-font-size:12px;
-list-style-type:none;
-background:#F0F8FF;
-`
-const Assignees = styled.ul`
-display:flex;
-margin-right:0px;
-`
-const TaskUpdateButtons = styled.div`
-display:flex;
-`
-const ButtonDiv = styled.div`
-margin:10px;
-font-size:15px;
-&:hover{
-	background: #f2f2f2;
-	cursor:pointer;
-}
-`
-const GoogleDocUrl = styled.div``
-
-const StyledLink = styled.a`
-font:var(--font);
-font-size:12px;
-color:blue;
-margin-left:10px;
-display: "table-cell"
-margin-bottom:10px;
 `
