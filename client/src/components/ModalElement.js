@@ -58,7 +58,9 @@ useEffect(() =>{
       const data = await response.json();
       setUsers(data.data)
       users.map((user) =>{
+        if(user !== localStorage.getItem("user")){
         allUsers.push({value:user.email,label:user.email});
+        }
       })
       setUsersDropdownList(allUsers);
   }

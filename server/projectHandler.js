@@ -92,8 +92,31 @@ const addProject = async (req, res) => {
   }
 };
 
+
+//deletes a project
+const deleteProject = async (req,res) =>{
+  const client = new MongoClient(MONGO_URI,options);
+  try{
+    await client.connect();
+    //connect to the database
+    const db = client.db("FinalProject");
+    const projectId = req.params.projectId;
+    console.log(projectId)
+    const result = await db.collection("projects").deleteOne({projectId:projectId});
+    console.log(result)
+    result?
+    res.status(204).json({status:204, message:"data deleted"}):
+    res.status(404).json({status:404,message:"data not deleted"});
+  }catch(err){
+    console.log(err.stack);
+  }finally{
+    client.close();
+  }
+}
+
 module.exports = {
   getAllProjects,
   addProject,
   getRecentProjects,
+  deleteProject
 };

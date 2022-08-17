@@ -9,8 +9,9 @@ import {FiHome} from "react-icons/fi";
 import waterImage1 from "../images/waterImage1.png"
 import { ToastContainer,toast } from "react-toastify";
 
+
 const Dashboard = () =>{
-    const {projects,setProjects,updateProjects,adminUsers,setAdminUsers,createProjectClicked,setCreateProjectClicked,setSelectedProjectId,recentProjects,setRecentProjects,projectClicked,setProjectClicked} = useContext(ManagefluentContext);
+    const {projects,setProjects,updateProjects,adminUsers,setAdminUsers,createProjectClicked,setCreateProjectClicked,setSelectedProjectId,recentProjects,setRecentProjects,setUpdateProjects,selectedProjectProperties,setSelectedProjectProperties} = useContext(ManagefluentContext);
     const [isOpen,setIsOpen] = useState(false);
     const navigate = useNavigate();
     const [isAdmin,setIsAdmin] = useState(false);
@@ -43,9 +44,10 @@ const Dashboard = () =>{
     },[localStorage.getItem("user"),updateProjects]);
 
     //This method is to navigate to the project when clicked
-    const navigateToProjectTasks = (projectId) =>{
-        navigate(`/project/${projectId}`);
-        setSelectedProjectId(projectId);
+    const navigateToProjectTasks = (project) =>{
+        navigate(`/project/${project.projectId}`);
+        setSelectedProjectId(project.projectId);
+        setSelectedProjectProperties(project);
     }
 
     const CreateProjectClicked = () =>{
@@ -109,7 +111,7 @@ const Dashboard = () =>{
                         </CreateProjectIcon><CreateProject>Create a new project</CreateProject>
                         </>: null))}
                 </NewProject>
-                <RecentProjects>RECENT PROJECTS</RecentProjects>
+                <RecentProjects>Recent Projects</RecentProjects>
                 <RecentProjectDiv>{recentProjects.length>0?
                     recentProjects.map((recentProject) =>{
                         return <RecentProjectItems onClick={() => projectClickedFn(recentProject)}>{recentProject.projectName}</RecentProjectItems>
@@ -120,8 +122,8 @@ const Dashboard = () =>{
         <MainDiv>
       {currentProjects.map((project) =>{
           return(
-           <ProjectWrapper onClick={() => navigateToProjectTasks(project.projectId)}>
-           <Projects>
+           <ProjectWrapper>
+           <Projects onClick={() => navigateToProjectTasks(project)}>
                 <Name>{project.projectName}</Name>
                 <Description>{project.projectDescription}</Description>
                 <CreatedBy>Project Owner: {project.createdBy}</CreatedBy>
@@ -243,7 +245,7 @@ width:400px;
 `
 
 const RecentProjects = styled.div`
-font-size : 15px;
+font-size : 18px;
 color:#2bd4d4;
 margin : 20px 0 0px 30px;`
 
@@ -258,7 +260,7 @@ margin-bottom:15px;
 
 const CreatedBy = styled.div`
 font-size : 12px;
-margin-top : 55px;
+margin-top : 35px;
 `
 export const Li = styled.li`
 list-style:none;
@@ -279,4 +281,5 @@ border:1px solid lightgray;
 justify-content:space-evenly;
 box-shadow : 2px 2px 2px 2px lightgray;
 `
+
 export default Dashboard
