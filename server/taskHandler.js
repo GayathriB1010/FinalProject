@@ -103,6 +103,7 @@ const addTask = async (req, res) => {
         description: "",
         name: name,
         assignedTo: [],
+        documents:""
       });
     if (result.acknowledged) {
       res
@@ -125,7 +126,7 @@ const updateTask = async (req, res) => {
     await client.connect();
     // connect to the database 
     const db = client.db("FinalProject");
-    const { description, assignedTo, taskId } = req.body;
+    const { description, assignedTo, taskId,documents } = req.body;
     const result = await db.collection("tasks").findOne({ taskId:taskId});
     if (result) {
       const result1 = await db
@@ -133,7 +134,7 @@ const updateTask = async (req, res) => {
         .updateOne(
           { taskId: taskId },
           { $set: { description: 
-            description, assignedTo: assignedTo } },
+            description, assignedTo: assignedTo,documents:documents } },
           { multi: true }
         );
       if (result1.modifiedCount > 0) {

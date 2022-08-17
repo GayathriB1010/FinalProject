@@ -9,11 +9,9 @@ import {FiRepeat} from "react-icons/fi";
 import TaskUpdateModal from "./TaskUpdateModal"
 
 export default function InprogressComponent() {
-    const {inProgressTasks,setInProgressTasks,selectedProjectId,name,setName,updateTaskFeed,setupdateTaskFeed,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected} = useContext(ManagefluentContext);
+    const {inProgressTasks,setInProgressTasks,selectedProjectId,name,setName,updateTaskFeed,setupdateTaskFeed,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected,taskSelected,setTaskSelected} = useContext(ManagefluentContext);
 
     const [isOpen,setIsOpen] = useState(false);
-    //To set the task selected and pass it on to the task modal
-    const [taskSelected,setTaskSelected] = useState(null);
     //state to set open for the taskupdateModal
     const [taskUpdateIsopen,setTaskUpdateisOpen] = useState(false);
 

@@ -4,6 +4,7 @@ import { ManagefluentContext } from './ManagefluentContext';
 import styled from 'styled-components';
 import Select from 'react-select';
 import LoadingWheel from './LoadingScreen';
+import useDrivePicker from "react-google-drive-picker";
 
 export default function TaskModal({ open, onClose }) {
 	const [ taskDescription, setStateTaskDescription ] = useState(null);
@@ -12,12 +13,14 @@ export default function TaskModal({ open, onClose }) {
 		selectedProjectId,
 		updateTaskFeed,setupdateTaskFeed
 	} = useContext(ManagefluentContext);
+	const [openPicker, data, authResponse] = useDrivePicker();
 
 	const [ selectedOptions, setSelectedOptions ] = useState();
 	const [ users, setUsers ] = useState([]);
 	const [ usersDropdownList, setUsersDropdownList ] = useState([]);
+	const [googleDocUrl,setGoogleDocUrl] = useState("");
 	const allUsers = [];
-	
+
 	//If there was users previously assigned to this task, those members should get displayed in the default dropdown value
 	useEffect(
 		() => {
@@ -65,7 +68,8 @@ export default function TaskModal({ open, onClose }) {
 			body: JSON.stringify({
 				taskId: taskSelected.taskId,
 				description: taskDescription,
-				assignedTo: assingnedMembers
+				assignedTo: assingnedMembers,
+				documents : googleDocUrl
 			}),
 			headers: {
 				'Content-type': 'application/json'
@@ -76,6 +80,7 @@ export default function TaskModal({ open, onClose }) {
 				setupdateTaskFeed(!updateTaskFeed)
 				//setDefaultValuesPreviouslySelected([]);
 				//setSelectedOptions([]);
+				setGoogleDocUrl("")
 				setTaskSelected(null)
 				setSelectedOptions(null)
 				onClose();
@@ -87,10 +92,35 @@ export default function TaskModal({ open, onClose }) {
 	};
 
 	const closeFn = () =>{
-		onClose();
+		setGoogleDocUrl("")
 		setTaskSelected(null)
+		onClose();
 	}
 
+	const handleOpenPicker = () => {
+		openPicker({
+		  clientId:"688130310661-lbtn1a352pvcb8q8t6p8hajdnn8mffeb.apps.googleusercontent.com",
+		  developerKey:"AIzaSyB_TajnS_zbw4tmprQzEo113s5xHxGnVNk",
+		  viewId: "DOCS",
+      // token: token, // pass oauth token in case you already have one
+      showUploadView: true,
+      showUploadFolders: true,
+      supportDrives: true,
+      multiselect: true,
+      // customViews: customViewsArray, // custom view
+      callbackFunction: (data) => {
+        if (data.action === 'cancel') {
+          console.log('User clicked cancel/close button')
+        }
+		else{
+			console.log(data)
+        setGoogleDocUrl(data.docs[0].embedUrl)
+		console.log(googleDocUrl)
+		}
+      },
+    })
+  }
+	 
 	if (!open) {
 		return null;
 	} else {
@@ -119,6 +149,9 @@ export default function TaskModal({ open, onClose }) {
 							<Button type="submit">Save</Button>
 						</Buttons>
 					</Form>
+					<button onClick={() => handleOpenPicker()}>Open picker</button>
+						{taskSelected.documents!==null?<GoogleDocUrl>{taskSelected.documents}</GoogleDocUrl>:null}
+						{googleDocUrl!==null?<GoogleDocUrl>{googleDocUrl}</GoogleDocUrl>:null}
 					<CloseButton onClick={() => closeFn()}>Close</CloseButton>
 				</ModalContent>
 			</Wrapper>
@@ -214,3 +247,5 @@ const Members = styled.div``;
 
 const HeadAndClose = styled.div`display: flex;`;
 const DisplayMembers = styled.div``;
+
+const GoogleDocUrl = styled.div``

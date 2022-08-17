@@ -10,11 +10,10 @@ import TaskUpdateModal from "./TaskUpdateModal"
 
 
 export default function DoneTasks() {
-    const {doneTasks,setDoneTasks,selectedProjectId,name,setName,updateTaskFeed,setupdateTaskFeed,taskClicked,setTaskClicked, defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected} = useContext(ManagefluentContext);
+    const {doneTasks,setDoneTasks,selectedProjectId,name,setName,updateTaskFeed,setupdateTaskFeed,taskClicked,setTaskClicked, taskSelected,setTaskSelected,defaultValuesPreviouslySelected, setDefaultValuesPreviouslySelected} = useContext(ManagefluentContext);
 
     const [isOpen,setIsOpen] = useState(false);
-    //To set the task selected and pass it on to the task modal
-    const [taskSelected,setTaskSelected] = useState(null);
+
     //state to set open for the taskupdateModal
     const [taskUpdateIsopen,setTaskUpdateisOpen] = useState(false);
 
