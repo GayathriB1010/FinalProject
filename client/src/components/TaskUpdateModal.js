@@ -156,4 +156,8 @@ padding:5px;
 background:white;
 border:1px solid blue;
 font-family:var(--font);
+&:hover{
+	background: #f2f2f2;
+	cursor:pointer;
+}
 `

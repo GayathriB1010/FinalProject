@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import waterImage1 from "../images/waterImage1.png"
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -57,10 +58,10 @@ const SignIn = () => {
   
   return (
     <>
+      <Wrapper>
       <Headings>
         <H1>Sign In!</H1>
       </Headings>
-      <Wrapper>
         <Form onSubmit ={handleSubmit}>
           <Email>
             <Input
@@ -103,7 +104,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction:column;
   align-items: center;
-  justify-content: center;
+  height:100vh;
+  background-image:url(${waterImage1})
 `;
 // ------------------------------------------------
 // Header

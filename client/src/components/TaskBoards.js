@@ -9,6 +9,7 @@ import {FiRepeat} from "react-icons/fi";
 import TaskUpdateModal from "./TaskUpdateModal"
 import InprogressComponent from './InprogressComponent';
 import DoneTasks from './DoneTasks';
+import waterImage1 from "../images/waterImage1.png"
 
 //This is the main component of task board where all the todo, inprogress and done tasks are displayed
 export default function TaskBoards() {
@@ -137,6 +138,7 @@ border:1px solid white;
 width:25%;
 margin-top : 20px;
 box-shadow : 2px 2px 2px 2px lightgray;
+background-image:url(${waterImage1})
 `
 
 const InProgress = styled.div`
@@ -144,13 +146,15 @@ border:1px solid white;
 width:25%;
 margin-top : 20px;
 box-shadow : 2px 2px 2px 2px lightgray;
-}`
+background-image:url(${waterImage1})
+`
 
 const Done = styled.div`
 border:1px solid white;
 box-shadow : 2px 2px 2px 2px lightgray;
 width:25%;
-margin-top : 20px; `
+margin-top : 20px; 
+background-image:url(${waterImage1})`
 
 const NewTask = styled.div`
 height : 20vh;
@@ -202,10 +206,16 @@ margin-right:0px;
 `
 const TaskUpdateButtons = styled.div`
 display:flex;
+margin:10px;
 `
 const ButtonDiv = styled.div`
 margin:10px;
-font-size:15px;`
+font-size:15px;
+&:hover{
+	background: #f2f2f2;
+	cursor:pointer;
+}
+`
 
 const GoogleDocUrl = styled.div``
 

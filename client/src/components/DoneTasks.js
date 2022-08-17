@@ -125,7 +125,11 @@ display:flex;
 `
 const ButtonDiv = styled.div`
 margin:10px;
-font-size:15px;`
+font-size:15px;
+&:hover{
+	background: #f2f2f2;
+	cursor:pointer;
+}`
 const GoogleDocUrl = styled.div``
 
 const StyledLink = styled.a`

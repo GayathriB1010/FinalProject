@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import waterImage1 from "../../images/waterImage1.png"
 
 // ------------------------------------------------
 // Main div
@@ -11,6 +12,7 @@ export const Wrapper = styled.div`
   flex-direction:column;
   align-items: center;
   justify-content: center;
+  background-image:url(${waterImage1})
 `;
 // ------------------------------------------------
 // Header
