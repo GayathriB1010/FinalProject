@@ -5,6 +5,8 @@ const { MONGO_URI } = process.env;
 // use this package to generate unique ids: https://www.npmjs.com/package/uuid
 const { v4: uuidv4 } = require("uuid");
 const url = require("url");
+const bcrypt = require("bcrypt")
+const salt = bcrypt.genSalt(10);
 
 const options = {
     useNewUrlParser: true,
@@ -21,11 +23,12 @@ const createUserData = async () => {
         const db = client.db("FinalProject");
 
         for (let i=0;i<30;i++){
+            let newPassword = faker.internet.password(10);
             const user =({
                 firstName:faker.name.fullName(),
                 lastName : faker.name.fullName(),
                 email : faker.internet.email(),
-                password : faker.internet.password(10),
+                password : bcrypt.hash(newPassword,salt,function(err,hash){}),
                 role: "user"
             })
             await db.collection("users").insertOne(user);  
